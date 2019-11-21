@@ -213,12 +213,7 @@
         <menuitem id="contextPageRotateCw" label="Rotate Clockwise" data-l10n-id="page_rotate_cw" title="顺时针旋转"></menuitem>
         <menuitem id="contextPageRotateCcw" label="Rotate Counter-Clockwise" data-l10n-id="page_rotate_ccw" title="逆时针旋转"></menuitem>
       </menu> -->
-
-        <div id="viewerContainer" tabindex="0">
-            <div id="viewer" class="ofdViewer">
-                <app-page *ngFor="let page of Pages" [(PageData)]="page"></app-page>
-            </div>
-        </div>
+        <app-viewer-container [(Pages)]="Pages"></app-viewer-container>
 
         <div id="errorWrapper" hidden="true">
             <div id="errorMessageLeft">

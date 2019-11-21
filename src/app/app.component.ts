@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DocumentService } from './services/modules';
 import { Page } from './models/modules';
@@ -11,7 +11,7 @@ import { Page } from './models/modules';
 export class AppComponent {
   title = 'OFDReader';
 
-  private Pages: Page[];
+  private Pages: Page[] = [];
 
   constructor(
     private http: HttpClient,
@@ -19,8 +19,8 @@ export class AppComponent {
     ) {
       this.http.post(`http://localhost:8011/jyb.ofd`, {}, { responseType: 'blob' })
         .subscribe(data => {
-          this.docSrv.setContext(new Blob([data], { type: 'application/zip' }));
-          this.Pages = this.docSrv.AllPages;
+          this.docSrv.LoadContextAsync(new Blob([data], { type: 'application/zip' }));
+          this.docSrv.AllPages.then(pages => this.Pages = pages);
       });
     }
 }

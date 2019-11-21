@@ -1,74 +1,48 @@
 import { Brush } from './Brush.model';
 import { Resource } from './Resource.model';
 import { Page } from './Page.model';
+import { Lazy } from './lazy';
 
 export class Doc {
 
     private DocElement: Element;
-    private index: number;
+
+    public readonly DocRoot: string;
 
     public constructor(index: number, DocElement: Element) {
         this.DocElement = DocElement;
 
-        this.docRoot = this.DocElement.tryGetElementTextByTagName('ofd:DocRoot');
-        if (!this.docRoot) { throw new Error(`找不到入口文件`); }
+        this.DocRoot = this.DocElement.tryGetElementTextByTagName('ofd:DocRoot');
+        if (!this.DocRoot) { throw new Error(`找不到入口文件`); }
 
-        this.index = index;
-
-        this.Brushs = [];
-        this.Resources = [];
-        this.Pages = [];
+        this.Index = index;
     }
 
-    public get Index(): number { return this.index; }
+    public readonly Index: number;
 
-    private docID: string;
+    private readonly docID = new Lazy<string>(() => this.TagText('ofd:DocID'));
 
-    public get DocID(): string {
-        return !this.docID ?
-            this.docID = this.TagText('ofd:DocID')
-            : this.docID;
-    }
+    public get DocID(): string { return this.docID.Value; }
 
-    private creationDate: Date;
+    private readonly creationDate = new Lazy<Date>(() => new Date(this.TagText('ofd:CreationDate')));
 
-    public get CreationDate(): Date {
-        return !this.creationDate ?
-            this.creationDate = new Date(this.TagText('ofd:CreationDate'))
-            : this.creationDate;
-    }
+    public get CreationDate(): Date { return this.creationDate.Value; }
 
-    private modDate: Date;
+    private readonly modDate = new Lazy<Date>(() => new Date(this.TagText('ofd:ModDate')));
 
-    public get ModDate(): Date {
-        return !this.modDate ?
-            this.modDate = new Date(this.TagText('ofd:ModDate'))
-            : this.modDate;
-    }
+    public get ModDate(): Date { return this.modDate.Value; }
 
-    private title: string;
+    private readonly title = new Lazy<string>(() => this.TagText('ofd:Title'));
 
-    public get Title(): string {
-        return !this.title ?
-            this.title = this.TagText('ofd:Title')
-            : this.title;
-    }
+    public get Title(): string { return this.title.Value; }
 
-    private author: string;
+    private readonly author = new Lazy<string>(() => this.TagText('ofd:Author'));
 
-    public get Author(): string {
-        return !this.author ?
-            this.author = this.TagText('ofd:Author')
-            : this.author;
-    }
+    public get Author(): string { return this.author.Value; }
 
-    private creator: string;
+    private readonly creator = new Lazy<string>(() => this.TagText('ofd:Creator'));
 
-    public get Creator(): string {
-        return !this.creator ?
-            this.creator = this.TagText('ofd:Creator')
-            : this.creator;
-    }
+    public get Creator(): string { return this.creator.Value; }
 
     private customData: { [key: string]: string };
 
@@ -84,24 +58,11 @@ export class Doc {
         return this.customData;
     }
 
-    private docRoot: string;
+    public Brushs: Brush[] = [];
 
-    public get DocRoot(): string { return this.docRoot; }
+    public Resources: Resource[] = [];
 
-    /**
-     * 画笔
-     */
-    Brushs: Brush[];
-
-    /**
-     * 资源
-     */
-    Resources: Resource[];
-
-    /**
-     * 页面
-     */
-    Pages: Page[];
+    public Pages: Page[] = [];
 
     private TagText(Name: string): string {
         return this.DocElement.tryGetElementTextByTagName(Name);

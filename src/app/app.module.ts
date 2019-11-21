@@ -2,17 +2,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { ComponentsModule } from './components/components.module';
-
+import { PageComponent } from './components/page/page.component';
+import { ViewerContainerComponent } from './components/viewer-container/viewer-container.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    PageComponent,
+    ViewerContainerComponent
   ],
   imports: [
-    ComponentsModule,
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    // ComponentsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

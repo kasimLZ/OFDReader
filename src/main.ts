@@ -6,6 +6,7 @@ import { environment } from './environments/environment';
 
 import './environments/extensions/Element.extension';
 
+
 if (environment.production) {
   enableProdMode();
 }
