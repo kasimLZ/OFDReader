@@ -7,6 +7,7 @@ interface PageItemType {
 
 export default interface PageItem {
     ItemType: keyof PageItemType;
+    Draw(canvas: CanvasRenderingContext2D, Zoom?: number): void;
 }
 
 

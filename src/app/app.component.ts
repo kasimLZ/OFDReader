@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DocumentService } from './services/modules';
+import { DocumentService, SideBarService } from './services/modules';
 import { Page } from './models/modules';
 
 @Component({
@@ -15,7 +15,8 @@ export class AppComponent {
 
   constructor(
     private http: HttpClient,
-    private docSrv: DocumentService
+    private docSrv: DocumentService,
+    private sideBarSrv: SideBarService
     ) {
       this.http.post(`http://localhost:8011/jyb.ofd`, {}, { responseType: 'blob' })
         .subscribe(data => {
@@ -23,4 +24,6 @@ export class AppComponent {
           this.docSrv.AllPages.then(pages => this.Pages = pages);
       });
     }
+
+  private SideBarSwitch() { this.sideBarSrv.toggle(); }
 }

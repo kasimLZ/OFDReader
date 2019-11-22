@@ -363,16 +363,16 @@ html[dir='rtl'] #sidebarContainer {
     right: -200px;
 }
 
-#outerContainer.sidebarMoving>#sidebarContainer,
-#outerContainer.sidebarOpen>#sidebarContainer {
+#outerContainer.sidebarMoving #sidebarContainer,
+#outerContainer.sidebarOpen #sidebarContainer {
     visibility: visible;
 }
 
-html[dir='ltr'] #outerContainer.sidebarOpen>#sidebarContainer {
+html[dir='ltr'] #outerContainer.sidebarOpen #sidebarContainer {
     left: 0px;
 }
 
-html[dir='rtl'] #outerContainer.sidebarOpen>#sidebarContainer {
+html[dir='rtl'] #outerContainer.sidebarOpen #sidebarContainer {
     right: 0px;
 }
 

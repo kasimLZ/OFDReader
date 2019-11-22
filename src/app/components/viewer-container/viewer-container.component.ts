@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Page } from 'src/app/models/modules';
-import { $ } from 'protractor';
+import { SideBarService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-viewer-container',
@@ -9,7 +9,11 @@ import { $ } from 'protractor';
 })
 export class ViewerContainerComponent implements OnInit {
 
+  constructor(private sideBarSrv: SideBarService) {}
+
   private pages: Page[];
+
+  private lastScroll: number;
 
   @Input()
   get Pages() { return this.pages; }
@@ -22,16 +26,42 @@ export class ViewerContainerComponent implements OnInit {
   pagesChange: EventEmitter<any> = new EventEmitter();
 
   ngOnInit() {
+    const thread = setInterval(() => {
+      if (this.pages.length > 0) {
+        this.pages.forEach(a => a.Render());
+        clearInterval(thread);
+      }
+    } , 10);
+    this.lastScroll = 0;
   }
 
 
-  private bbbbbb = false;
   public test(event: any) {
-    if(this.bbbbbb) return;
+    const viewerContainer = document.getElementById('viewerContainer');
 
-    setTimeout(() => {
-      this.pages.forEach(a => a.Render());
-    }, 2000);
-    this.bbbbbb = true;
+    // 1 => down, -1 => up
+    const direction = viewerContainer.scrollTop > this.lastScroll ? 1 : -1;
+
+    const MiddleLine = viewerContainer.scrollTop + viewerContainer.offsetHeight / 2;
+
+    const pageElements = document.getElementsByClassName('page');
+
+    let CurrentIndex = this.sideBarSrv.currentIndex;
+
+    if (direction > 0) {
+      while ((pageElements[CurrentIndex + direction] as HTMLElement).offsetTop < MiddleLine) {
+        CurrentIndex = CurrentIndex + direction;
+      }
+    } else {
+      // 此处存在bug，后续处理
+      console.log((pageElements[CurrentIndex + direction] as HTMLElement).offsetTop);
+      console.log(MiddleLine);
+      while ((pageElements[CurrentIndex + direction] as HTMLElement).offsetTop > MiddleLine) {
+        CurrentIndex = CurrentIndex + direction;
+      }
+    }
+
+    this.sideBarSrv.currentIndex = CurrentIndex;
+
   }
 }

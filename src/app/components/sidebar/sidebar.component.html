@@ -1,0 +1,24 @@
+<div id="sidebarContainer">
+    <div id="toolbarSidebar">
+        <div class="splitToolbarButton toggled">
+            <button id="viewThumbnail" class="toolbarButton group toggled" title="显示缩略图" tabindex="2" data-l10n-id="thumbs">
+                <span data-l10n-id="thumbs_label">缩略图</span>
+            </button>
+            <button id="viewOutline" class="toolbarButton group" title="显示文档大纲" tabindex="3" data-l10n-id="outline" disabled="">
+                <span data-l10n-id="outline_label">文档大纲</span>
+            </button>
+        </div>
+    </div>
+    <div id="sidebarContent">
+        <div id="thumbnailView">
+            <a *ngFor="let pic of sideBarSrv.pictures; let i = index;" title="页码 {{i + 1}}">
+                <div id="thumbnailContainer{{i + 1}}" class="thumbnail {{ sideBarSrv.currentIndex == i ? 'selected' : '' }}" data-loaded="true">
+                    <div class="thumbnailSelectionRing" [ngStyle]="{ 'width': '100px', 'height': 100 / pic.scale + 'px'}">
+                        <img class="thumbnailImage" style="width: 100%; height: 100%;" src="{{ pic.base64 }}">
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div id="outlineView" class="hidden"></div>
+    </div>
+</div>

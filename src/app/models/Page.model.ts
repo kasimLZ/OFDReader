@@ -1,9 +1,12 @@
 import { Lazy } from './lazy';
+import PageItem from './PageItem/PageItem.interface';
+import TextObject from './PageItem/TextObject';
+import PathObject from './PageItem/PathObject';
 
-export class Page  {
+export class Page {
     private static reg: RegExp = new RegExp('(Doc_\\d)/Pages/(Page_\\d)/Content.xml');
-    private pageItems: any[];
-    private pageElement: Element[] = [];
+    private pageItems: PageItem[] = [];
+    private Member: HTMLCollection;
     private Document: Document;
     private pointer: number;
 
@@ -17,37 +20,35 @@ export class Page  {
         const Size = PhysicalBoxs[0].innerHTML.split(' ');
         this.PhysicalWidth = parseInt(Size[2], null);
         this.PhysicalHeight = parseInt(Size[3], null);
+        this.PhysicalScale = this.PhysicalWidth / this.PhysicalHeight;
 
-        const Member = dom.getElementsByTagName('ofd:Layer')[0].children;
-        this.Length = Member.length;
-        // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < Member.length; i++) {
-            this.pageElement.push(Member[i]);
-        }
+        this.Member = dom.getElementsByTagName('ofd:Layer')[0].children;
     }
 
     public readonly Index: string;
 
     public readonly PhysicalWidth: number;
     public readonly PhysicalHeight: number;
+    public readonly PhysicalScale: number;
 
-    public readonly Length: number;
+    public get Length(): number { return this.Member.length; }
 
     public Render: () => void;
 
-    [Symbol.iterator](): Iterator<any, any, undefined> {
-        return {
-            next(value?: any): any {
-                
-                return null;
-                // throw new Error("Method not implemented.");
-            },
-            return(value?: any): IteratorResult<any, any> {
-                throw new Error("Method not implemented.");
-            },
-            throw(e?: any): IteratorResult<any, any> {
-                throw new Error("Method not implemented.");
+    public Get(index: number): PageItem {
+        if (index < 0 || index >= this.Length) {
+            return null;
+        }
+        if (!this.pageItems[index]) {
+            switch (this.Member[index].nodeName) {
+                case TextObject.TagName:
+                    this.pageItems.push(new TextObject(this.Member[index])); break;
+                case PathObject.TagName:
+                    this.pageItems.push(new PathObject(this.Member[index])); break;
+                default:
+                    console.warn(this.Member[index].nodeName);
             }
-          };
+        }
+        return this.pageItems[index];
     }
 }

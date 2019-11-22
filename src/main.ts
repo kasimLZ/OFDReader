@@ -5,7 +5,7 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 import './environments/extensions/Element.extension';
-
+// import './environments/extensions/String.extension';
 
 if (environment.production) {
   enableProdMode();

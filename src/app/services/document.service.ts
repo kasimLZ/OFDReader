@@ -22,7 +22,7 @@ export class DocumentService {
       if (!ofdxml) { throw new Error('找不到入口文件'); }
       return ofdxml.async('text')
       .then(ctx => this.ReadDoc(ctx))
-      .then(() => this.Docs.forEach(doc => this.allPages.push(...doc.Pages)))
+      .then(() => this.Docs.forEach(doc => { for (const page of doc.Pages) { this.allPages.push(page); } }))
       .then(() => this.allPages);
     });
   }
