@@ -705,18 +705,18 @@ html[dir='rtl'] #toolbarViewerLeft {
     right: 0;
 }
 
-html[dir='ltr'] #toolbarViewerLeft>*,
-html[dir='ltr'] #toolbarViewerMiddle>*,
-html[dir='ltr'] #toolbarViewerRight>*,
-html[dir='ltr'] .findbar>* {
+html[dir='ltr'] #toolbarViewerLeft *,
+html[dir='ltr'] #toolbarViewerMiddle *,
+html[dir='ltr'] #toolbarViewerRight *,
+html[dir='ltr'] .findbar * {
     position: relative;
     float: left;
 }
 
-html[dir='rtl'] #toolbarViewerLeft>*,
-html[dir='rtl'] #toolbarViewerMiddle>*,
-html[dir='rtl'] #toolbarViewerRight>*,
-html[dir='rtl'] .findbar>* {
+html[dir='rtl'] #toolbarViewerLeft *,
+html[dir='rtl'] #toolbarViewerMiddle *,
+html[dir='rtl'] #toolbarViewerRight *,
+html[dir='rtl'] .findbar * {
     position: relative;
     float: right;
 }
@@ -731,12 +731,12 @@ html[dir='rtl'] .splitToolbarButton {
     display: inline-block;
 }
 
-html[dir='ltr'] .splitToolbarButton>.toolbarButton {
+html[dir='ltr'] .splitToolbarButton .toolbarButton {
     border-radius: 0;
     float: left;
 }
 
-html[dir='rtl'] .splitToolbarButton>.toolbarButton {
+html[dir='rtl'] .splitToolbarButton .toolbarButton {
     border-radius: 0;
     float: right;
 }

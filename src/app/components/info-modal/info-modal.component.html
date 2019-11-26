@@ -1,0 +1,19 @@
+<div id="overlayContainer" [ngClass]="{ hidden: infoSrv.IsHide }">
+    <div id="documentPropertiesOverlay" [ngClass]="{ 'container': true, 'hidden' : infoSrv.IsHide }">
+        <div class="dialog">
+            <ng-container *ngFor="let info of infoSrv.Info; let i = index;">
+                <div class="row" *ngFor="let key of InfoKeys(info);">
+                    <span>{{key}}:</span>
+                    <p>{{info[key]}}</p>
+                </div>
+                <div class="separator"></div>
+            </ng-container>
+
+            <div class="buttonRow">
+                <button id="documentPropertiesClose" class="overlayButton" (click)="CloseDialog()">
+                    <span data-l10n-id="document_properties_close">关闭</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

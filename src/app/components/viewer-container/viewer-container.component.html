@@ -1,4 +1,4 @@
-<div id="viewerContainer" tabindex="0" (scroll)="test($event)">
+<div id="viewerContainer" tabindex="0" (scroll)="Scroll($event)">
     <div id="viewer" class="ofdViewer">
         <app-page *ngFor="let page of Pages" [(PageData)]="page"></app-page>
     </div>

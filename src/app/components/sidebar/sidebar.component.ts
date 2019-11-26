@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { SideBarService } from '../../services/modules';
+import { PageService } from '../../services/modules';
 
 @Component({
   selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent {
 
-  constructor(private sideBarSrv: SideBarService) {}
+  constructor(private pagerSrv: PageService) {}
 
-
+  private GoToPage(index: number): void {
+    this.pagerSrv.ScrollTo(index);
+  }
 }

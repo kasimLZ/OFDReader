@@ -1,11 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { Page } from '../../models/modules';
-import { SideBarService } from 'src/app/services/modules';
+import { PageService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-page',
-  templateUrl: './page.component.html',
-  styleUrls: ['./page.component.css']
+  templateUrl: './page.component.html'
 })
 export class PageComponent implements OnInit {
 
@@ -17,7 +16,7 @@ export class PageComponent implements OnInit {
   private ElementId: string;
   public IsRendered = false;
 
-  constructor(private sideBarSrv: SideBarService) {}
+  constructor(private pageSrv: PageService) {}
 
   @Input()
   get PageData() { return this.pageData; }
@@ -45,6 +44,6 @@ export class PageComponent implements OnInit {
       this.pageData.Get(index).Draw(this.Context, 1019 / this.pageData.PhysicalWidth);
     }
     const i = parseInt(this.pageData.Index.replace('_Doc_0_Page_', ''), null);
-    this.sideBarSrv.Set(i, this.PageData.PhysicalScale, this.Canvas.toDataURL('image/png'));
+    this.pageSrv.SetThumbnail(i, this.PageData.PhysicalScale, this.Canvas.toDataURL('image/png'));
   }
 }

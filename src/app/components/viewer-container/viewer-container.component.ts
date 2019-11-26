@@ -1,15 +1,14 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Page } from 'src/app/models/modules';
-import { SideBarService } from 'src/app/services/modules';
+import { PageService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-viewer-container',
-  templateUrl: './viewer-container.component.html',
-  styleUrls: ['./viewer-container.component.css']
+  templateUrl: './viewer-container.component.html'
 })
 export class ViewerContainerComponent implements OnInit {
 
-  constructor(private sideBarSrv: SideBarService) {}
+  constructor(private pageSrv: PageService) {}
 
   private pages: Page[];
 
@@ -36,32 +35,31 @@ export class ViewerContainerComponent implements OnInit {
   }
 
 
-  public test(event: any) {
+  private Scroll(event: any) {
     const viewerContainer = document.getElementById('viewerContainer');
 
     // 1 => down, -1 => up
     const direction = viewerContainer.scrollTop > this.lastScroll ? 1 : -1;
 
+    this.lastScroll = viewerContainer.scrollTop;
+
     const MiddleLine = viewerContainer.scrollTop + viewerContainer.offsetHeight / 2;
 
     const pageElements = document.getElementsByClassName('page');
 
-    let CurrentIndex = this.sideBarSrv.currentIndex;
+    let CurrentIndex = this.pageSrv.CurrentIndex;
 
     if (direction > 0) {
-      while ((pageElements[CurrentIndex + direction] as HTMLElement).offsetTop < MiddleLine) {
+      while (CurrentIndex < pageElements.length - 1 &&  (pageElements[CurrentIndex + direction] as HTMLElement).offsetTop < MiddleLine) {
         CurrentIndex = CurrentIndex + direction;
       }
     } else {
-      // 此处存在bug，后续处理
-      console.log((pageElements[CurrentIndex + direction] as HTMLElement).offsetTop);
-      console.log(MiddleLine);
-      while ((pageElements[CurrentIndex + direction] as HTMLElement).offsetTop > MiddleLine) {
+      while (CurrentIndex > 0 && (pageElements[CurrentIndex] as HTMLElement).offsetTop > MiddleLine) {
         CurrentIndex = CurrentIndex + direction;
       }
     }
 
-    this.sideBarSrv.currentIndex = CurrentIndex;
+    this.pageSrv.CurrentIndex = CurrentIndex;
 
   }
 }

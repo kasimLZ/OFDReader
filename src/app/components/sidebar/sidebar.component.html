@@ -11,8 +11,8 @@
     </div>
     <div id="sidebarContent">
         <div id="thumbnailView">
-            <a *ngFor="let pic of sideBarSrv.pictures; let i = index;" title="页码 {{i + 1}}">
-                <div id="thumbnailContainer{{i + 1}}" class="thumbnail {{ sideBarSrv.currentIndex == i ? 'selected' : '' }}" data-loaded="true">
+            <a *ngFor="let pic of pagerSrv.SideBarThumbnail; let i = index;" title="页码 {{i + 1}}" (click)="GoToPage(i)">
+                <div id="thumbnailContainer{{i + 1}}" class="thumbnail {{ pagerSrv.currentIndex == i ? 'selected' : '' }}" data-loaded="true">
                     <div class="thumbnailSelectionRing" [ngStyle]="{ 'width': '100px', 'height': 100 / pic.scale + 'px'}">
                         <img class="thumbnailImage" style="width: 100%; height: 100%;" src="{{ pic.base64 }}">
                     </div>
