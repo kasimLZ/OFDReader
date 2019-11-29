@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { PageService } from 'src/app/services/modules';
+import { ToolBarService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-first-page',
@@ -10,14 +10,14 @@ import { PageService } from 'src/app/services/modules';
   `
 })
 export class FirstPageComponent {
-  constructor(private pageSrv: PageService) {}
+  constructor(private toolbarSrv: ToolBarService) {}
 
   @HostListener('click')
   _click() {
-    this.pageSrv.ScrollTo(0);
+    this.toolbarSrv.ScrollTo(0);
   }
 
-  private get Enable(): boolean {
-      return this.pageSrv.CurrentIndex === 0;
+  public get Enable(): boolean {
+      return this.toolbarSrv.CurrentIndex === 0;
   }
 }

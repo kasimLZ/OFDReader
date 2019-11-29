@@ -1,6 +1,5 @@
 import { Component, HostListener } from '@angular/core';
 import { InfoModalService } from 'src/app/services/modules';
-import { timingSafeEqual } from 'crypto';
 
 @Component({
   selector: 'app-file-info',

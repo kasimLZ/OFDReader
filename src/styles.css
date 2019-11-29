@@ -117,6 +117,8 @@
     box-shadow: 0px 2px 10px #ff0;
 }
 
+
+/* 
  :-webkit-full-screen .ofdViewer .page {
     margin-bottom: 100%;
     border: 0;
@@ -127,6 +129,8 @@
     border: 0;
 }
 
+
+
  :-ms-fullscreen .ofdViewer .page {
     margin-bottom: 100% !important;
     border: 0;
@@ -135,7 +139,7 @@
  :fullscreen .ofdViewer .page {
     margin-bottom: 100%;
     border: 0;
-}
+} */
 
 .ofdViewer .page .annotText>img {
     position: absolute;

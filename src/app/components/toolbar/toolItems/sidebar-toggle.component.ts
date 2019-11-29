@@ -1,12 +1,12 @@
 import { Component, HostListener, ChangeDetectionStrategy } from '@angular/core';
-import { PageService } from 'src/app/services/modules';
+import { ToolBarService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-sidebar-toggle',
   template: `
   <button
     id="sidebarToggle"
-    class="toolbarButton {{pageSrv.isSideBarOpen ? 'toggled' : ''}}"
+    class="toolbarButton {{toobarSrv.SideBarSrv.isSideBarOpen ? 'toggled' : ''}}"
     title="切换侧栏"
     tabindex="11"
     data-l10n-id="toggle_sidebar">
@@ -16,12 +16,10 @@ import { PageService } from 'src/app/services/modules';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarToggleComponent {
-  constructor(
-    private pageSrv: PageService
-  ) {}
+  constructor(public toobarSrv: ToolBarService) {}
 
   @HostListener('click')
   _click() {
-    this.pageSrv.SideBarToggle();
+    this.toobarSrv.SideBarSrv.SideBarToggle();
   }
 }

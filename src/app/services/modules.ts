@@ -1,9 +1,14 @@
 import { DocumentService } from './document.service';
-import { PageService } from './page.service';
+import { ToolBarService } from './toolbar.service';
 import { InfoModalService } from './info.modal.service';
+import { ZoomService, InputZoomTypeFormat } from './zoom.service';
+import { SideBarService } from './sidebar.service';
 
 export {
     DocumentService,
-    PageService,
-    InfoModalService
+    ToolBarService,
+    InfoModalService,
+    ZoomService,
+    InputZoomTypeFormat,
+    SideBarService
 };

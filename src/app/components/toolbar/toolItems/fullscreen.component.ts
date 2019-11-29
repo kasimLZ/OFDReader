@@ -1,5 +1,4 @@
 import { Component, HostListener } from '@angular/core';
-import { PageService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-fullscreen',
@@ -13,7 +12,28 @@ import { PageService } from 'src/app/services/modules';
 export class FullScreenComponent {
   @HostListener('click')
   _click() {
-    // this.pageSrv.SideBarToggle();
-    console.log('fullscreen');
+    const RootElement: any = document.documentElement;
+    const doc: any = document;
+    if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+      if (RootElement.requestFullscreen) {
+        RootElement.requestFullscreen();
+      } else if (RootElement.webkitRequestFullscreen) {
+        RootElement.webkitRequestFullscreen();
+      } else if (RootElement.mozRequestFullScreen) {
+        RootElement.mozRequestFullScreen();
+      } else if (RootElement.msRequestFullscreen) {
+        RootElement.msRequestFullscreen();
+      }
+    } else {
+      if (doc.exitFullscreen) {
+        doc.exitFullscreen();
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen();
+      } else if (doc.mozCancelFullScreen) {
+        doc.mozCancelFullScreen();
+      } else if (doc.msExitFullscreen) {
+        doc.msExitFullscreen();
+      }
+    }
   }
 }

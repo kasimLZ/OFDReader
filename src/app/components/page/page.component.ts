@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ToolBarService } from 'src/app/services/modules';
 import { Page } from '../../models/modules';
-import { PageService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-page',
@@ -8,15 +8,18 @@ import { PageService } from 'src/app/services/modules';
 })
 export class PageComponent implements OnInit {
 
-  private pageWidth = 1019;
-  private pageHeight;
+  public ElementId: string;
+  public get pageWidth(): number { return this.pageData != null ? this.pageData.PhysicalWidth : 0; }
+  public get pageHeight(): number { return this.pageData != null ? this.pageData.PhysicalHeight : 0; }
+
   private pageData: Page;
   private Canvas: HTMLCanvasElement;
   private Context: CanvasRenderingContext2D;
-  private ElementId: string;
-  public IsRendered = false;
+  private IsRendered = false;
 
-  constructor(private pageSrv: PageService) {}
+
+
+  constructor(public toobarSrv: ToolBarService) {}
 
   @Input()
   get PageData() { return this.pageData; }
@@ -31,19 +34,20 @@ export class PageComponent implements OnInit {
   ngOnInit() {
     this.ElementId = `pageContainer${this.pageData.Index}`;
     this.pageData.Render = () => this.Render();
-    this.pageHeight = this.pageWidth / this.PageData.PhysicalScale;
   }
 
-  private Render(): void {
+  public Render(): void {
     if (!this.IsRendered) {
       this.Canvas = document.querySelector(`#${this.ElementId} canvas`);
       this.Context = this.Canvas.getContext('2d');
     } else { return; }
 
     for (let index = 0; index < this.pageData.Length; index++) {
-      this.pageData.Get(index).Draw(this.Context, 1019 / this.pageData.PhysicalWidth);
+      this.pageData.Get(index).Draw(this.Context, 4);
     }
     const i = parseInt(this.pageData.Index.replace('_Doc_0_Page_', ''), null);
-    this.pageSrv.SetThumbnail(i, this.PageData.PhysicalScale, this.Canvas.toDataURL('image/png'));
+    this.toobarSrv.SideBarSrv.SetThumbnail(i, this.PageData.PhysicalScale, this.Canvas.toDataURL('image/png'));
   }
+
+  
 }

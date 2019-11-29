@@ -1,5 +1,5 @@
-<div id="viewerContainer" tabindex="0" (scroll)="Scroll($event)">
+<div id="viewerContainer" tabindex="0" [ngClass]="{ 'grab-to-pan-grab': toolbarSrv.HandToolSwitch }" (scroll)="Scroll()">
     <div id="viewer" class="ofdViewer">
-        <app-page *ngFor="let page of Pages" [(PageData)]="page"></app-page>
+        <app-page *ngFor="let tmp of Pages; let i = index" [(PageData)]="Pages[i]"></app-page>
     </div>
 </div>

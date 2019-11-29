@@ -1,81 +1,39 @@
 import { Injectable } from '@angular/core';
 import * as JSZip from 'jszip';
-import { Page, Doc } from '../models/modules';
+import { Doc } from '../models/modules';
+import Env from './environment.variable';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentService {
+  /** ofd归档文件的二进制流 */
+  private ofdPackageBlob: Blob;
 
-  private docFile: JSZip;
+  /** 归档文件中，文档的索引 */
+  private ofdDocuments: Doc[];
 
-  private allPages: Page[] = [];
+  /** 提供归档文件的二进制流，以提供下载支持 */
+  public get PackageBlob(): Blob { return this.ofdPackageBlob; }
 
-  private Docs: Doc[];
+  /** 从二进制流解析文件 */
+  public async InitDocumentContextAsync(blob: Blob): Promise<void> {
+    this.ofdPackageBlob = blob;
+    Env.PRESENT_ARCHIVE = await JSZip.loadAsync(blob);
 
-  private PageLoadTask: Promise<Page[]>;
+    const ofdxml = Env.PRESENT_ARCHIVE.files['OFD.xml'];
+    if (!ofdxml) { throw new Error('Cannot find entry file "ofd.xml"'); }
+    const entryConfig = (await ofdxml.async('text')).ParseXmlDocument();
 
-  public LoadContextAsync(blob: Blob) {
-    this.PageLoadTask = JSZip.loadAsync(blob).then(async zip => {
-      this.docFile = zip;
-      const ofdxml = zip.files['OFD.xml'];
-      if (!ofdxml) { throw new Error('找不到入口文件'); }
-      return ofdxml.async('text')
-      .then(ctx => this.ReadDoc(ctx))
-      .then(() => this.Docs.forEach(doc => { for (const page of doc.Pages) { this.allPages.push(page); } }))
-      .then(() => this.allPages);
-    });
-  }
+    const Prefix = entryConfig.getOfdPrefix();
+    const Bodys = entryConfig.getElementsByTagName(`${Prefix}:DocBody`);
 
-  public get AllPages(): Promise<Page[]> { return this.PageLoadTask; }
-
-  private async ReadDoc(ofdContent: string): Promise<void> {
-    this.Docs = [];
-    const bodys = this.ParseXmlDocument(ofdContent).getElementsByTagName('ofd:DocBody');
-    const DocTasks: Promise<void>[] = [];
+    this.ofdDocuments = [];
 
     // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < bodys.length; i++) {
-      const doc = new Doc(i, bodys[i]);
-      this.Docs.push(doc);
-      const docXml = this.docFile.files[doc.DocRoot];
-      if (!docXml) { throw new Error(''); }
-      DocTasks.push(docXml.async('text').then(ctx => this.ReadPage(doc, ctx)));
-    }
-    return Promise.all(DocTasks).then();
-  }
-
-  private async ReadPage(doc: Doc, DomContent: string): Promise<void> {
-    const Dom = this.ParseXmlDocument(DomContent);
-    const pages = Dom.getElementsByTagName('ofd:Page');
-    const PageTasks: Promise<void> [] = [];
-    // tslint:disable-next-line: prefer-for-of
-    for (let p = 0; p < pages.length; p++) {
-      const loc = `Doc_${doc.Index}/${pages[p].getAttribute('BaseLoc')}`;
-
-      PageTasks.push(this.docFile.files[loc].async('text').then(ctx => {
-        const page = new Page(loc, this.ParseXmlDocument(ctx));
-        doc.Pages.push(page);
-      }));
-    }
-    return Promise.all(PageTasks).then();
-  }
-
-
-  /**
-   * Convert xml string to dom
-   * @param content xml string
-   */
-  private ParseXmlDocument(content: string): Document {
-
-    if (DOMParser) {
-      return new DOMParser().parseFromString(content, 'text/xml');
-    } else {
-      const xmlDoc = new (window as any).ActiveXObject('Microsoft.XMLDOM');
-      xmlDoc.async = 'false';
-      xmlDoc.loadXML(content);
-      return xmlDoc;
+    for (let i = 0; i < Bodys.length; i++) {
+      const doc = new Doc(Bodys[i], Prefix);
+      this.ofdDocuments[doc.Index] = doc;
     }
   }
-
 }

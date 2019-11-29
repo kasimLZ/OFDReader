@@ -1,11 +1,13 @@
-import { Brush } from './Brush.model';
-import { Page } from './Page.model';
-import { Doc } from './Doc.model';
-import { Resource } from './Resource.model';
+import { Brush } from './Brush';
+import { Page } from './Page';
+import { Doc } from './Doc';
+import { Info } from './Info';
+import { Resource } from './Resource';
 
 export {
     Brush,
     Page,
     Doc,
-    Resource
+    Resource,
+    Info,
 };

@@ -1,17 +1,21 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { PageSelecterComponent } from './toolItems/page-selecter.component';
 import { SidebarToggleComponent } from './toolItems/sidebar-toggle.component';
 import { DownloadComponent } from './toolItems/download.component';
 import { FullScreenComponent } from './toolItems/fullscreen.component';
 import { PrintComponent } from './toolItems/print.component';
+import { ZoomComponent } from './toolItems/zoom.component';
 
 const MainToolBarItems = [
     PageSelecterComponent,
     SidebarToggleComponent,
     DownloadComponent,
     FullScreenComponent,
-    PrintComponent
+    PrintComponent,
+    ZoomComponent
 ];
 
 import { FirstPageComponent } from './toolItems/first-page.component';
@@ -31,6 +35,10 @@ const SecondToolBarItems = [
 ];
 
 @NgModule({
+    imports: [
+        FormsModule,
+        BrowserModule
+    ],
     declarations: [
         ...MainToolBarItems,
         ...SecondToolBarItems

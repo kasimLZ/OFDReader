@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PageService } from 'src/app/services/modules';
+import { ToolBarService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-page-selecter',
@@ -17,25 +17,25 @@ import { PageService } from 'src/app/services/modules';
   </div>
   <label id="pageNumberLabel" class="toolbarLabel" for="pageNumber" data-l10n-id="page_label">页面：</label>
   <input type="number" id="pageNumber" class="toolbarField pageNumber"
-     value="{{pageSrv.CurrentIndex + 1}}" size="4" min="1" tabindex="15" max="14" (change)="ChangePage($event)">
-  <span id="numPages" class="toolbarLabel">/ {{ pageSrv.MaxPage }} </span>
+     value="{{toolbarSrv.CurrentIndex + 1}}" size="4" min="1" tabindex="15" max="14" (change)="ChangePage($event)">
+  <span id="numPages" class="toolbarLabel">/ {{ toolbarSrv.MaxPage }} </span>
   `
 })
 export class PageSelecterComponent {
 
-  constructor(private pageSrv: PageService) {}
+  constructor(public toolbarSrv: ToolBarService) {}
 
-  private get disabled_Prev(): boolean { return this.pageSrv.CurrentIndex < 1; }
-  private get disabled_Next(): boolean { return this.pageSrv.CurrentIndex >= this.pageSrv.MaxPage - 1; }
+  public get disabled_Prev(): boolean { return this.toolbarSrv.CurrentIndex < 1; }
+  public get disabled_Next(): boolean { return this.toolbarSrv.CurrentIndex >= this.toolbarSrv.MaxPage - 1; }
 
-  public GotoPage(move: number): void { this.pageSrv.ScrollTo(this.pageSrv.CurrentIndex + move); }
+  public GotoPage(move: number): void { this.toolbarSrv.ScrollTo(this.toolbarSrv.CurrentIndex + move); }
 
   public ChangePage(e: any) {
     const input = e.target as HTMLInputElement;
     const TargetPage = parseInt(input.value, null) - 1;
 
-    if (!this.pageSrv.ScrollTo(TargetPage)) {
-      input.value = this.pageSrv.CurrentIndex.toString();
+    if (!this.toolbarSrv.ScrollTo(TargetPage)) {
+      input.value = this.toolbarSrv.CurrentIndex.toString();
     }
   }
 }

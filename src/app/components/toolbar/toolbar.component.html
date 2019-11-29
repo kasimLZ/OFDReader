@@ -26,43 +26,7 @@
             </div>
             <div class="outerCenter">
                 <div class="innerCenter" id="toolbarViewerMiddle">
-                    <div class="splitToolbarButton">
-                        <button id="zoomOut" class="toolbarButton zoomOut" title="缩小" tabindex="21" data-l10n-id="zoom_out">
-                            <span data-l10n-id="zoom_out_label">缩小</span>
-                        </button>
-                        <div class="splitToolbarButtonSeparator"></div>
-                        <button id="zoomIn" class="toolbarButton zoomIn" title="放大" tabindex="22" data-l10n-id="zoom_in">
-                            <span data-l10n-id="zoom_in_label">放大</span>
-                        </button>
-                    </div>
-                    <span id="scaleSelectContainer" class="dropdownToolbarButton" style="min-width: 78px; max-width: 78px;">
-                    <select id="scaleSelect" title="缩放" tabindex="23" data-l10n-id="zoom" style="min-width: 100px;">
-                        <option id="pageAutoOption" title="" value="auto" selected="selected" data-l10n-id="page_scale_auto">
-                            自动缩放</option>
-                        <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">实际大小
-                        </option>
-                        <option id="pageFitOption" title="" value="page-fit" data-l10n-id="page_scale_fit">适合页面</option>
-                        <option id="pageWidthOption" title="" value="page-width" data-l10n-id="page_scale_width">适合页宽
-                        </option>
-                        <option id="customScaleOption" title="" value="custom"></option>
-                        <option title="" value="0.5" data-l10n-id="page_scale_percent"
-                            data-l10n-args="{ &quot;scale&quot;: 50 }">50%</option>
-                        <option title="" value="0.75" data-l10n-id="page_scale_percent"
-                            data-l10n-args="{ &quot;scale&quot;: 75 }">75%</option>
-                        <option title="" value="1" data-l10n-id="page_scale_percent"
-                            data-l10n-args="{ &quot;scale&quot;: 100 }">100%</option>
-                        <option title="" value="1.25" data-l10n-id="page_scale_percent"
-                            data-l10n-args="{ &quot;scale&quot;: 125 }">125%</option>
-                        <option title="" value="1.5" data-l10n-id="page_scale_percent"
-                            data-l10n-args="{ &quot;scale&quot;: 150 }">150%</option>
-                        <option title="" value="2" data-l10n-id="page_scale_percent"
-                            data-l10n-args="{ &quot;scale&quot;: 200 }">200%</option>
-                        <option title="" value="3" data-l10n-id="page_scale_percent"
-                            data-l10n-args="{ &quot;scale&quot;: 300 }">300%</option>
-                        <option title="" value="4" data-l10n-id="page_scale_percent"
-                            data-l10n-args="{ &quot;scale&quot;: 400 }">400%</option>
-                    </select>
-                    </span>
+                    <app-zoom></app-zoom>
                 </div>
             </div>
         </div>
@@ -75,7 +39,7 @@
     </div>
 </div>
 
-<div id="secondaryToolbar" [ngClass]="{ 'secondaryToolbar': true, 'doorHangerRight': true, 'hidden': SecondTookBar }">
+<div id="secondaryToolbar" [ngClass]="{ 'secondaryToolbar': true, 'doorHangerRight': true, 'hidden': !toobarSrv.SecondToolBarSwitch  }" (mouseleave)="CloseSecondToolBar()">
     <div id="secondaryToolbarButtonContainer" style="max-height: 827px;">
         <!-- 首页 -->
         <app-first-page></app-first-page>

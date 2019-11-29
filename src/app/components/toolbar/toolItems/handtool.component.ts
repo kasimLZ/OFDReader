@@ -1,4 +1,6 @@
 import { Component, HostListener } from '@angular/core';
+import { ToolBarService } from 'src/app/services/modules';
+
 
 @Component({
   selector: 'app-hand-tool',
@@ -9,10 +11,11 @@ import { Component, HostListener } from '@angular/core';
   `
 })
 export class HandToolComponent {
-  constructor() {}
+  constructor(private toobarSrv: ToolBarService) {}
 
   @HostListener('click')
   _click() {
-      console.log('swith hand tool');
+      this.toobarSrv.HandToolSwitch = !this.toobarSrv.HandToolSwitch;
+      this.toobarSrv.SecondToolBarSwitch = false;
   }
 }

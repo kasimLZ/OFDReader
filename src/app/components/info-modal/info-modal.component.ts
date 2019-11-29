@@ -5,18 +5,15 @@ import { InfoModalService } from 'src/app/services/modules';
   selector: 'app-info-modal',
   templateUrl: './info-modal.component.html'
 })
-export class InfoModalComponent implements OnInit {
+export class InfoModalComponent {
 
-  constructor(private infoSrv: InfoModalService) { }
+  constructor(public infoSrv: InfoModalService) { }
 
-  ngOnInit() {
-  }
-
-  private CloseDialog(): void {
+  public CloseDialog(): void {
     this.infoSrv.Close();
   }
 
-  private InfoKeys(obj: any): string[] {
+  public InfoKeys(obj: any): string[] {
     return Object.keys(obj);
   }
 }

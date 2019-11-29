@@ -1,5 +1,4 @@
 import { Component, HostListener } from '@angular/core';
-import { PageService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-rotate-cw',

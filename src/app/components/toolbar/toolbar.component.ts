@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ToolBarService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-toolbar',
@@ -6,9 +7,13 @@ import { Component } from '@angular/core';
 })
 export class ToolbarComponent {
 
-  private SecondTookBar = true;
+  constructor(public toobarSrv: ToolBarService) {}
 
-  private ToggleSecondToolBar() {
-    this.SecondTookBar = !this.SecondTookBar;
+  public ToggleSecondToolBar() {
+    this.toobarSrv.SecondToolBarSwitch = !this.toobarSrv.SecondToolBarSwitch;
+  }
+
+  public CloseSecondToolBar() {
+    this.toobarSrv.SecondToolBarSwitch = false;
   }
 }

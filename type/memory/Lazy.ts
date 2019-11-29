@@ -1,12 +1,8 @@
 export class Lazy<T> {
 
-    constructor(creater: (() => T)) {
-        this.creater = creater;
-    }
+    constructor(private readonly creater: (() => T)) {}
 
-    private creater: () => T;
-
-    private value: T;
+    private value: T = null;
 
     private isValueCreated = false;
 

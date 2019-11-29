@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { PageService } from 'src/app/services/modules';
+import { DocumentService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-download',
@@ -10,9 +10,22 @@ import { PageService } from 'src/app/services/modules';
   `
 })
 export class DownloadComponent {
+
+  constructor(private docSrv: DocumentService) {}
+
   @HostListener('click')
   _click() {
-    // this.pageSrv.SideBarToggle();
-    console.log('ffffff');
+    if ('msSaveOrOpenBlob' in navigator) {
+      window.navigator.msSaveOrOpenBlob(this.docSrv.PackageBlob, 'test.ofd');
+    } else {
+      const url = window.URL.createObjectURL(this.docSrv.PackageBlob);
+      const link = document.createElement('a');
+
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', 'test.ofd');
+      document.body.appendChild(link);
+      link.click();
+    }
   }
 }

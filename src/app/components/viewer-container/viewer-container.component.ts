@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, HostListener } from '@angular/core';
 import { Page } from 'src/app/models/modules';
-import { PageService } from 'src/app/services/modules';
+import { ToolBarService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-viewer-container',
@@ -8,11 +8,8 @@ import { PageService } from 'src/app/services/modules';
 })
 export class ViewerContainerComponent implements OnInit {
 
-  constructor(private pageSrv: PageService) {}
+  constructor(private toolbarSrv: ToolBarService) {}
 
-  private pages: Page[];
-
-  private lastScroll: number;
 
   @Input()
   get Pages() { return this.pages; }
@@ -21,8 +18,13 @@ export class ViewerContainerComponent implements OnInit {
       this.pages = value;
       this.pagesChange.emit(value);
   }
+
+  public pages: Page[] = [];
+  public lastScroll = 0;
   @Output()
   pagesChange: EventEmitter<any> = new EventEmitter();
+
+  private startDrag = false;
 
   ngOnInit() {
     const thread = setInterval(() => {
@@ -34,8 +36,7 @@ export class ViewerContainerComponent implements OnInit {
     this.lastScroll = 0;
   }
 
-
-  private Scroll(event: any) {
+  public Scroll() {
     const viewerContainer = document.getElementById('viewerContainer');
 
     // 1 => down, -1 => up
@@ -47,7 +48,7 @@ export class ViewerContainerComponent implements OnInit {
 
     const pageElements = document.getElementsByClassName('page');
 
-    let CurrentIndex = this.pageSrv.CurrentIndex;
+    let CurrentIndex = this.toolbarSrv.CurrentIndex;
 
     if (direction > 0) {
       while (CurrentIndex < pageElements.length - 1 &&  (pageElements[CurrentIndex + direction] as HTMLElement).offsetTop < MiddleLine) {
@@ -59,7 +60,32 @@ export class ViewerContainerComponent implements OnInit {
       }
     }
 
-    this.pageSrv.CurrentIndex = CurrentIndex;
+    this.toolbarSrv.CurrentIndex = CurrentIndex;
 
+  }
+
+
+  @HostListener('mousedown', ['$event'])
+  public MouseDown(e: any) {
+    if (this.toolbarSrv.HandToolSwitch) {
+      this.startDrag = true;
+    }
+  }
+
+  @HostListener('mouseleave', ['$event'])
+  @HostListener('mouseup', ['$event'])
+  public MouseUp(e: any) {
+    if (this.toolbarSrv.HandToolSwitch) {
+      this.startDrag = false;
+    }
+  }
+
+  @HostListener('mousemove', ['$event'])
+  public MouseDrag(e: any) {
+    if (this.toolbarSrv.HandToolSwitch && this.startDrag) {
+      const viewerContainer = document.getElementById('viewerContainer');
+      viewerContainer.scrollTop -= e.movementY;
+      viewerContainer.scrollLeft -= e.movementX;
+    }
   }
 }

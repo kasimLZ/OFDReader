@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { PageService } from 'src/app/services/modules';
+import { ToolBarService } from 'src/app/services/modules';
 
 @Component({
   selector: 'app-last-page',
@@ -10,14 +10,14 @@ import { PageService } from 'src/app/services/modules';
     `
 })
 export class LastPageComponent {
-  constructor(private pageSrv: PageService) {}
+  constructor(private toobarSrv: ToolBarService) {}
 
   @HostListener('click')
   _click() {
-    this.pageSrv.ScrollTo(this.pageSrv.MaxPage - 1);
+    this.toobarSrv.ScrollTo(this.toobarSrv.MaxPage - 1);
   }
 
-  private get Enable(): boolean {
-    return this.pageSrv.CurrentIndex === this.pageSrv.MaxPage - 1;
+  public get Enable(): boolean {
+    return this.toobarSrv.CurrentIndex === this.toobarSrv.MaxPage - 1;
 }
 }

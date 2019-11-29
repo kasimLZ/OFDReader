@@ -1,30 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DocumentService, PageService, InfoModalService } from './services/modules';
+import { DocumentService, ToolBarService } from './services/modules';
 import { Page } from './models/modules';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'OFDReader';
 
-  private Pages: Page[] = [];
+  public Pages: Page[] = [];
 
   constructor(
-    private http: HttpClient,
-    private docSrv: DocumentService,
-    private pageSrv: PageService
-    ) {
-      this.http.post(`http://localhost:8011/jyb.ofd`, {}, { responseType: 'blob' })
-        .subscribe(data => {
-          this.docSrv.LoadContextAsync(new Blob([data], { type: 'application/zip' }));
-          this.docSrv.AllPages.then(pages => {
-            this.Pages = pages;
-            this.pageSrv.MaxPage = pages.length;
-          });
+    public http: HttpClient,
+    public docSrv: DocumentService,
+    public toolBarSrv: ToolBarService
+  ) {
+    // if (window.location.search)
+    // window.location.Filters();
+    this.http.post(`http://localhost:8011/jyb.ofd`, {}, { responseType: 'blob', observe: 'response' })
+      .subscribe(data => {
+        // data.headers.keys().forEach(key => {
+        //   console.log(`${key} => ${data.headers.get(key)}`);
+        // });
+        this.docSrv.InitDocumentContextAsync(new Blob([data.body], { type: 'application/zip' }));
+        // this.docSrv.AllPages.then(pages => {
+        //   this.Pages = pages;
+        //   this.toolBarSrv.MaxPage = pages.length;
+        // });
       });
-    }
+  }
 }
