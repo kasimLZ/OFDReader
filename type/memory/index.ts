@@ -1,5 +1,5 @@
-import { Lazy } from './Lazy';
-import { LazyCollection } from './LazyCollection';
+import { Lazy } from './src/Lazy';
+import { LazyCollection } from './src/LazyCollection';
 
 export {
     Lazy,

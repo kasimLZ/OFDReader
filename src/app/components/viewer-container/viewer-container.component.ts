@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostListener } from '@angular/core';
-import { Page } from 'src/app/models/modules';
+import { Page } from 'type/ofd';
 import { ToolBarService } from 'src/app/services/modules';
 
 @Component({
@@ -27,12 +27,18 @@ export class ViewerContainerComponent implements OnInit {
   private startDrag = false;
 
   ngOnInit() {
+    let counter = 0;
     const thread = setInterval(() => {
-      if (this.pages.length > 0) {
-        this.pages.forEach(a => a.Render());
+      counter++;
+      if (counter > 100) {
         clearInterval(thread);
       }
-    } , 10);
+      if (this.pages.length > 0) {
+        this.pages.forEach(a => { a.Render(); });
+        clearInterval(thread);
+      } else {
+      }
+    } , 100);
     this.lastScroll = 0;
   }
 

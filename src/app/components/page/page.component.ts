@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ToolBarService } from 'src/app/services/modules';
-import { Page } from '../../models/modules';
+import { Page } from 'type/ofd';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-page',
@@ -9,8 +10,6 @@ import { Page } from '../../models/modules';
 export class PageComponent implements OnInit {
 
   public ElementId: string;
-  public get pageWidth(): number { return this.pageData != null ? this.pageData.PhysicalWidth : 0; }
-  public get pageHeight(): number { return this.pageData != null ? this.pageData.PhysicalHeight : 0; }
 
   private pageData: Page;
   private Canvas: HTMLCanvasElement;
@@ -19,7 +18,7 @@ export class PageComponent implements OnInit {
 
 
 
-  constructor(public toobarSrv: ToolBarService) {}
+  constructor(public toobarSrv: ToolBarService, private sanitizer: DomSanitizer) {}
 
   @Input()
   get PageData() { return this.pageData; }
@@ -40,14 +39,22 @@ export class PageComponent implements OnInit {
     if (!this.IsRendered) {
       this.Canvas = document.querySelector(`#${this.ElementId} canvas`);
       this.Context = this.Canvas.getContext('2d');
-    } else { return; }
-
-    for (let index = 0; index < this.pageData.Length; index++) {
-      this.pageData.Get(index).Draw(this.Context, 4);
     }
-    const i = parseInt(this.pageData.Index.replace('_Doc_0_Page_', ''), null);
-    this.toobarSrv.SideBarSrv.SetThumbnail(i, this.PageData.PhysicalScale, this.Canvas.toDataURL('image/png'));
+
+    const WaitLoaded = setInterval(() => {
+      if (this.pageData.status) {
+        this.DrawAllElement();
+        clearInterval(WaitLoaded);
+      }
+    }, 100);
   }
 
-  
+  private DrawAllElement(): void {
+    for (let index = 0; index < this.pageData.Length; index++) {
+      this.pageData.GetItemByIndex(index).Draw(this.Context, 4);
+    }
+    const i = parseInt(this.pageData.Index.replace('_Page_', ''), null);
+    this.toobarSrv.SideBarSrv.SetThumbnail(i, this.PageData.Scale,
+      this.sanitizer.bypassSecurityTrustUrl(this.Canvas.toDataURL('image/png')));
+  }
 }

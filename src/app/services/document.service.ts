@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as JSZip from 'jszip';
-import { Doc } from '../models/modules';
-import Env from './environment.variable';
+import { Doc, PageCollection, DocShare } from '../../../type/ofd';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +18,9 @@ export class DocumentService {
   /** 从二进制流解析文件 */
   public async InitDocumentContextAsync(blob: Blob): Promise<void> {
     this.ofdPackageBlob = blob;
-    Env.PRESENT_ARCHIVE = await JSZip.loadAsync(blob);
+    DocShare.PRESENT_ARCHIVE = await JSZip.loadAsync(blob);
 
-    const ofdxml = Env.PRESENT_ARCHIVE.files['OFD.xml'];
+    const ofdxml = DocShare.PRESENT_ARCHIVE.files['OFD.xml'];
     if (!ofdxml) { throw new Error('Cannot find entry file "ofd.xml"'); }
     const entryConfig = (await ofdxml.async('text')).ParseXmlDocument();
 
@@ -32,8 +31,12 @@ export class DocumentService {
 
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < Bodys.length; i++) {
-      const doc = new Doc(Bodys[i], Prefix);
+      const doc = await Doc.Parse(Bodys[i], Prefix);
       this.ofdDocuments[doc.Index] = doc;
     }
+  }
+
+  public GetDocAllPages(DocIndex: number): PageCollection {
+    return this.ofdDocuments[DocIndex].Pages;
   }
 }

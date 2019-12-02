@@ -1,3 +1,3 @@
-<div [id]="ElementId" class="page" [ngStyle]="{'width': pageWidth + 'px', 'height': pageHeight + 'px'}">
-    <canvas width="{{pageWidth}}" height="{{pageHeight}}"></canvas>
+<div [id]="ElementId" class="page" [ngStyle]="{'width': pageData.Width * 4 + 'px', 'height': pageData.Height * 4 + 'px'}">
+    <canvas width="{{pageData.Width * 4}}" height="{{pageData.Height * 4 }}"></canvas>
 </div>

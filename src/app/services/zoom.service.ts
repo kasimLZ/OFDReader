@@ -21,7 +21,7 @@ class ZoomOptions {
   public '2': ZoomOption = { sort: 8, value: '2', i10n: 'page_scale_percent', text: '200%' };
   public '3': ZoomOption = { sort: 9, value: '3', i10n: 'page_scale_percent', text: '300%' };
   public '4': ZoomOption = { sort: 10, value: '4', i10n: 'page_scale_percent', text: '400%' };
-  public 'custom': ZoomOption = { sort: 11, value: 'custom', i10n: 'page_scale_custom', text: '自定义' };
+  // public 'custom': ZoomOption = { sort: 11, value: 'custom', i10n: 'page_scale_custom', text: '自定义' };
 }
 
 export type InputZoomTypeFormat = keyof ZoomOptions;

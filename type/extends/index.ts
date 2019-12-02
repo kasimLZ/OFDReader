@@ -1,4 +1,4 @@
-import './Element.extension';
-import './Location.extension';
-import './String.extension';
-import './Dcoument.extension';
+import './src/Element.extension';
+import './src/Location.extension';
+import './src/String.extension';
+import './src/Dcoument.extension';

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DocumentService, ToolBarService } from './services/modules';
-import { Page } from './models/modules';
-import { stringify } from 'querystring';
+import { Page } from '../../type/ofd';
 
 @Component({
   selector: 'app-root',
@@ -18,18 +17,14 @@ export class AppComponent {
     public docSrv: DocumentService,
     public toolBarSrv: ToolBarService
   ) {
-    // if (window.location.search)
-    // window.location.Filters();
-    this.http.post(`http://localhost:8011/jyb.ofd`, {}, { responseType: 'blob', observe: 'response' })
-      .subscribe(data => {
-        // data.headers.keys().forEach(key => {
-        //   console.log(`${key} => ${data.headers.get(key)}`);
-        // });
-        this.docSrv.InitDocumentContextAsync(new Blob([data.body], { type: 'application/zip' }));
-        // this.docSrv.AllPages.then(pages => {
-        //   this.Pages = pages;
-        //   this.toolBarSrv.MaxPage = pages.length;
-        // });
+    this.http.post(`http://localhost:8011/aaa.ofd`, {}, { responseType: 'blob', observe: 'response' })
+      .subscribe(async data => {
+        await this.docSrv.InitDocumentContextAsync(new Blob([data.body], { type: 'application/zip' }));
+        const collection = this.docSrv.GetDocAllPages(0);
+        for (const page of collection) {
+          this.Pages.push(page);
+        }
+        this.toolBarSrv.MaxPage = this.Pages.length;
       });
   }
 }

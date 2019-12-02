@@ -1,5 +1,3 @@
-import * as JSZip from 'jszip';
-
 export default class EnvironmentVariable {
 
     public static readonly DEFAULT_SCALE = 'auto';
@@ -11,6 +9,4 @@ export default class EnvironmentVariable {
     public static SecondToolBarSwitch = false;
     public static CurrentIndex = 0;
     public static MaxPage = 0;
-
-    public static PRESENT_ARCHIVE: JSZip = null;
 }

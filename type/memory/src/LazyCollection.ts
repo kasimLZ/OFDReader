@@ -1,23 +1,27 @@
-export class LazyCollection<T> {
+export class LazyCollection<T> implements Iterable<T> {
 
     constructor(
         private readonly creater: ((index: number) => T),
-        public readonly length: number
-    ) {}
+        length: number
+    ) {
+        this.Length = length;
+    }
 
     private ValueContainer: (T)[] = [];
 
+    public readonly Length: number;
+
     public Get(index: number): T {
-        if (index < 0 || index >= this.length) { return undefined; }
+        if (index < 0 || index >= this.Length) { return undefined; }
         if (this.ValueContainer[index] == null) {
-            try { this.ValueContainer[index] = this.creater(index); } catch {}
+            this.ValueContainer[index] = this.creater(index);
         }
         return this.ValueContainer[index];
     }
 
     [Symbol.iterator](): IterableIterator<T> {
         let index = 0;
-        const length = this.length;
+        const length = this.Length;
         const container = this;
         return {
             [Symbol.iterator](): IterableIterator<T> {

@@ -1,8 +1,11 @@
-import PageItem from './PageItem.interface';
+import PageItemBase from '../Infrastructure/PageItem.base';
+import { DocShare } from '../Infrastructure/DocShare';
 
-export default class TextObejct implements PageItem {
+export default class TextObejct extends PageItemBase {
 
     constructor(node: Element) {
+        super(node);
+
         const TextCode = node.getElementsByTagName('ofd:TextCode')[0];
 
         const Boundarys = node.getAttribute('Boundary').split(' ');
@@ -64,8 +67,8 @@ export default class TextObejct implements PageItem {
             if (deltaArr[i] !== 'g') {
                 delta.push(parseFloat(deltaArr[i]));
             } else {
-                const ix = parseFloat(deltaArr[++i]);
                 const len = parseInt(deltaArr[++i], null);
+                const ix = parseFloat(deltaArr[++i]);
                 for (let j = 0; j < len; j++) { delta.push(ix); }
             }
         }
@@ -73,13 +76,12 @@ export default class TextObejct implements PageItem {
     }
 
     public Draw(canvas: CanvasRenderingContext2D, Zoom?: number): void {
+        console.log(canvas);
         if (!Zoom) { Zoom = 1; }
-
         canvas.fillStyle = this.Color;
-        canvas.font = `${Math.ceil(this.Size * Zoom)}px SimSun`;
-
+        canvas.font = `${Math.ceil(this.Size * DocShare.DEFAULT_ZOOM * Zoom)}px SimSun`;
         for (const cset of this.CharSet) {
-            canvas.fillText(cset.chr, cset.x * Zoom, cset.y * Zoom);
+            canvas.fillText(cset.chr, cset.x * DocShare.DEFAULT_ZOOM * Zoom, cset.y  * DocShare.DEFAULT_ZOOM * Zoom);
         }
     }
 }
