@@ -28,17 +28,22 @@ export class ViewerContainerComponent implements OnInit {
 
   ngOnInit() {
     let counter = 0;
+    let loaded = true;
     const thread = setInterval(() => {
+      loaded = true;
       counter++;
-      if (counter > 100) {
-        clearInterval(thread);
-      }
+      if (counter > 100) { clearInterval(thread); }
       if (this.pages.length > 0) {
-        this.pages.forEach(a => { a.Render(); });
-        clearInterval(thread);
-      } else {
+        for (const page of this.pages) {
+          loaded = loaded && page.status;
+          if (!loaded) { break; }
+        }
+        if (loaded) {
+          this.toolbarSrv.ZoomSrv.Change('auto');
+          clearInterval(thread);
+        }
       }
-    } , 100);
+    }, 100);
     this.lastScroll = 0;
   }
 

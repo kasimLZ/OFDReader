@@ -8,5 +8,6 @@ export default class EnvironmentVariable {
     public static HandToolSwitch = false;
     public static SecondToolBarSwitch = false;
     public static CurrentIndex = 0;
+    public static CurrentDocIndex = 0;
     public static MaxPage = 0;
 }

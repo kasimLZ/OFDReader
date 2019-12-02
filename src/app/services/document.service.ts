@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as JSZip from 'jszip';
-import { Doc, PageCollection, DocShare } from '../../../type/ofd';
+import { Doc, PageCollection, DocShare } from 'type/ofd';
+import Env from './environment.variable';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,10 @@ export class DocumentService {
       this.ofdDocuments[doc.Index] = doc;
     }
   }
+  public get PresentDocument(): PageCollection { return this.ofdDocuments[Env.CurrentDocIndex].Pages; }
 
   public GetDocAllPages(DocIndex: number): PageCollection {
+    Env.CurrentDocIndex = DocIndex;
     return this.ofdDocuments[DocIndex].Pages;
   }
 }

@@ -18,7 +18,13 @@ export class PageComponent implements OnInit {
 
 
 
-  constructor(public toobarSrv: ToolBarService, private sanitizer: DomSanitizer) {}
+  constructor(
+      public toobarSrv: ToolBarService,
+      private sanitizer: DomSanitizer
+    ) {}
+
+  public get PageWidth(): number { return this.pageData.Width * this.toobarSrv.ZoomSrv.Scale; }
+  public get PageHeight(): number { return this.pageData.Height * this.toobarSrv.ZoomSrv.Scale; }
 
   @Input()
   get PageData() { return this.pageData; }
@@ -51,7 +57,7 @@ export class PageComponent implements OnInit {
 
   private DrawAllElement(): void {
     for (let index = 0; index < this.pageData.Length; index++) {
-      this.pageData.GetItemByIndex(index).Draw(this.Context, 4);
+      this.pageData.GetItemByIndex(index).Draw(this.Context, this.toobarSrv.ZoomSrv.Scale);
     }
     const i = parseInt(this.pageData.Index.replace('_Page_', ''), null);
     this.toobarSrv.SideBarSrv.SetThumbnail(i, this.PageData.Scale,

@@ -76,7 +76,6 @@ export default class TextObejct extends PageItemBase {
     }
 
     public Draw(canvas: CanvasRenderingContext2D, Zoom?: number): void {
-        console.log(canvas);
         if (!Zoom) { Zoom = 1; }
         canvas.fillStyle = this.Color;
         canvas.font = `${Math.ceil(this.Size * DocShare.DEFAULT_ZOOM * Zoom)}px SimSun`;
