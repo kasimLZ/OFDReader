@@ -8,7 +8,7 @@ import { ToolBarService } from 'src/app/services/modules';
 })
 export class ViewerContainerComponent implements OnInit {
 
-  constructor(private toolbarSrv: ToolBarService) {}
+  constructor(public toolbarSrv: ToolBarService) {}
 
 
   @Input()
@@ -20,6 +20,7 @@ export class ViewerContainerComponent implements OnInit {
   }
 
   public pages: Page[] = [];
+
   public lastScroll = 0;
   @Output()
   pagesChange: EventEmitter<any> = new EventEmitter();

@@ -1,11 +1,11 @@
 import { LazyCollection, Lazy } from 'type/memory';
-import PageItemBase from './Infrastructure/PageItem.base';
+import { PageItemBase } from './Infrastructure/PageItem.base';
+import { PageItemFactory } from './PageItem/PageItem.Factory';
 
-import TextObject from './PageItem/TextObject';
-import PathObject from './PageItem/PathObject';
+import { DocShare } from './Infrastructure/DocShare';
 
 export class Layer extends LazyCollection<PageItemBase> {
-    public constructor(public LayerElement: Element) {
+    public constructor(public LayerElement: Element, private docShare: DocShare) {
         super(index => this.ElementCreater(index), LayerElement.children.length);
     }
 
@@ -16,15 +16,9 @@ export class Layer extends LazyCollection<PageItemBase> {
 
     private ElementCreater(index: number): PageItemBase {
         if (this.LayerElement.children[index]) {
-            switch (this.LayerElement.children[index].nodeName) {
-                case TextObject.TagName:
-                    return new TextObject(this.LayerElement.children[index]);
-                case PathObject.TagName:
-                    return new PathObject(this.LayerElement.children[index]);
-                default:
-                    throw new Error('error');
-            }
+            return PageItemFactory.Create(this.LayerElement.children[index], this.docShare);
         }
+        return null;
     }
 
     public GetByIndex(index: number): PageItemBase {

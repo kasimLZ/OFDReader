@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DocumentService, ToolBarService } from './services/modules';
-import { Page } from '../../type/ofd';
+import { Page, Doc } from 'type/ofd';
 
 @Component({
   selector: 'app-root',
@@ -17,14 +17,50 @@ export class AppComponent {
     public docSrv: DocumentService,
     public toolBarSrv: ToolBarService
   ) {
-    this.http.post(`http://localhost:8011/aaa.ofd`, {}, { responseType: 'blob', observe: 'response' })
-      .subscribe(async data => {
-        await this.docSrv.InitDocumentContextAsync(new Blob([data.body], { type: 'application/zip' }));
+    let FilePath = window.location.Filter('_');
+
+    if (FilePath == null) { return; }
+    FilePath = decodeURIComponent(FilePath);
+
+    if (!FilePath.startsWith('http://')) {
+      FilePath = window.ofd.BaseUrl + FilePath;
+    }
+
+    this.http.post(FilePath, {}, { responseType: 'blob', observe: 'response' })
+      .subscribe(async response => {
+        const FileName: string = this.GetFileName(FilePath, response.headers);
+
+        await this.docSrv.InitDocumentContextAsync(FileName, new Blob([response.body], { type: 'application/zip' }));
         const collection = this.docSrv.GetDocAllPages(0);
         for (const page of collection) {
           this.Pages.push(page);
         }
         this.toolBarSrv.MaxPage = this.Pages.length;
+      }, (error: any) => {
+        console.error(error);
       });
+  }
+
+  public get ShowToolBar(): boolean {
+    let status = false;
+    for (const key of Object.keys(window.ofd.Feature)) {
+      status = status || window.ofd.Feature[key];
+      if (status) { return status; }
+    }
+    return status;
+  }
+
+  private GetFileName(filePath: string, header: HttpHeaders): string {
+    let fileName: string = header.get(window.ofd.FileHeader);
+
+    if (fileName == null) {
+      const urlparam = filePath.split('/');
+      fileName = urlparam[urlparam.length - 1];
+    }
+
+    if (!fileName.endsWith('.ofd')) {
+      fileName += '.ofd';
+    }
+    return fileName;
   }
 }

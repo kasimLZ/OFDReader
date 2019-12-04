@@ -1,7 +1,7 @@
 import { LazyCollection } from 'type/memory';
 import { IdentityElement } from './IdentityElement';
 
-export default class CollectionElement<T extends IdentityElement> extends LazyCollection<T> implements Iterable<T> {
+export class CollectionElement<T extends IdentityElement> extends LazyCollection<T> implements Iterable<T> {
 
     public constructor(
         private readonly Element: Element,
@@ -15,6 +15,7 @@ export default class CollectionElement<T extends IdentityElement> extends LazyCo
     private ID_MAP: { [key: number]: T } = {};
 
     public GetByIndex(index: number): T {
+        if (index < 0 || index >= this.Element.children.length) { return null; }
         const entity = this.Get(index);
         this.Element[entity.ID] = entity;
         return entity;
@@ -26,8 +27,8 @@ export default class CollectionElement<T extends IdentityElement> extends LazyCo
             if (font == null) { return null; }
             // tslint:disable-next-line: prefer-for-of
             for (let i = 0; i < this.Element.children.length; i++) {
-                if (font.isSameNode(this.Element.children[i])) {
-                    return this.GetByID(i);
+                if (ID === parseInt(this.Element.children[i].getAttribute('ID'), null)) {
+                    return this.GetByIndex(i);
                 }
             }
         }

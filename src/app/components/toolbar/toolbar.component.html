@@ -3,28 +3,35 @@
         <div id="toolbarViewer">
             <div id="toolbarViewerLeft">
                 <!-- 边栏开关 -->
-                <app-sidebar-toggle></app-sidebar-toggle>
-                <!-- 空格占位符 -->
-                <div class="toolbarButtonSpacer"></div>
-                <!-- 查找 暂时禁用 -->
-                <!-- 页面选择器 -->
-                <app-page-selecter></app-page-selecter>
+                <app-sidebar-toggle *ngIf="Feature.SideBar"></app-sidebar-toggle>
+
+                <ng-container *ngIf="Feature.PageSelecter">
+                    <!-- 空格占位符 -->
+                    <div class="toolbarButtonSpacer"></div>
+                    <!-- 查找 暂时禁用 -->
+                    <!-- 页面选择器 -->
+                    <app-page-selecter></app-page-selecter>
+                </ng-container>
+
             </div>
             <div id="toolbarViewerRight">
                 <!-- 全屏 -->
-                <app-fullscreen></app-fullscreen>
+                <app-fullscreen *ngIf="Feature.FullSreen"></app-fullscreen>
                 <!-- 打印 -->
-                <app-print></app-print>
+                <app-print *ngIf="Feature.Print"></app-print>
                 <!-- 下载 -->
-                <app-download></app-download>
-                <div class="toolbarButtonSpacer"></div>
-                <div class="verticalToolbarSeparator hiddenSmallView"></div>
+                <app-download *ngIf="Feature.DownLoad"></app-download>
 
-                <button id="secondaryToolbarToggle" class="toolbarButton" title="工具" tabindex="36" data-l10n-id="tools" (click)="ToggleSecondToolBar()">
-                    <span data-l10n-id="tools_label">工具</span>
-                </button>
+                <ng-container *ngIf="SecondBar">
+                    <div class="toolbarButtonSpacer"></div>
+                    <div class="verticalToolbarSeparator hiddenSmallView"></div>
+
+                    <button id="secondaryToolbarToggle" class="toolbarButton" title="工具" tabindex="36" data-l10n-id="tools" (click)="ToggleSecondToolBar()">
+                        <span data-l10n-id="tools_label">工具</span>
+                    </button>
+                </ng-container>
             </div>
-            <div class="outerCenter">
+            <div *ngIf="Feature.Zoomable" class="outerCenter">
                 <div class="innerCenter" id="toolbarViewerMiddle">
                     <app-zoom></app-zoom>
                 </div>
@@ -42,19 +49,19 @@
 <div id="secondaryToolbar" [ngClass]="{ 'secondaryToolbar': true, 'doorHangerRight': true, 'hidden': !toobarSrv.SecondToolBarSwitch  }" (mouseleave)="CloseSecondToolBar()">
     <div id="secondaryToolbarButtonContainer" style="max-height: 827px;">
         <!-- 首页 -->
-        <app-first-page></app-first-page>
+        <app-first-page *ngIf="Feature.ToFirst"></app-first-page>
         <!-- 末页 -->
-        <app-last-page></app-last-page>
-        <div class="horizontalToolbarSeparator"></div>
+        <app-last-page *ngIf="Feature.ToLast"></app-last-page>
+        <div *ngIf="Feature.ToFirst || Feature.ToLast" class="horizontalToolbarSeparator"></div>
         <!-- 顺时针 -->
-        <app-rotate-cw></app-rotate-cw>
+        <app-rotate-cw *ngIf="Feature.RotateCW"></app-rotate-cw>
         <!-- 逆时针 -->
-        <app-rotate-ccw></app-rotate-ccw>
-        <div class="horizontalToolbarSeparator"></div>
+        <app-rotate-ccw *ngIf="Feature.RotateCCW"></app-rotate-ccw>
+        <div *ngIf="Feature.RotateCW || Feature.RotateCCW" class="horizontalToolbarSeparator"></div>
         <!-- 手形工具 -->
-        <app-hand-tool></app-hand-tool>
-        <div class="horizontalToolbarSeparator"></div>
+        <app-hand-tool *ngIf="Feature.HandTool"></app-hand-tool>
+        <div *ngIf="Feature.HandTool || Feature.InfoDialog" class="horizontalToolbarSeparator"></div>
         <!-- 文件信息 -->
-        <app-file-info></app-file-info>
+        <app-file-info *ngIf="Feature.InfoDialog"></app-file-info>
     </div>
 </div>

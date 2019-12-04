@@ -15,15 +15,16 @@ export class DownloadComponent {
 
   @HostListener('click')
   _click() {
+    const fileName = this.docSrv.PackageFileName;
     if ('msSaveOrOpenBlob' in navigator) {
-      window.navigator.msSaveOrOpenBlob(this.docSrv.PackageBlob, 'test.ofd');
+      window.navigator.msSaveOrOpenBlob(this.docSrv.PackageBlob, fileName);
     } else {
       const url = window.URL.createObjectURL(this.docSrv.PackageBlob);
       const link = document.createElement('a');
 
       link.style.display = 'none';
       link.href = url;
-      link.setAttribute('download', 'test.ofd');
+      link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
     }

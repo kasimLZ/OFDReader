@@ -49,7 +49,7 @@ export class ZoomService {
   }
 
   public ReRender() {
-    for (const page of this.docSrv.PresentDocument) {
+    for (const page of this.docSrv.PresentDocument.Pages) {
       if (page.status) {
         page.Render();
       }
@@ -58,13 +58,14 @@ export class ZoomService {
 
 
   public Change(Scale: InputZoomTypeFormat|number): Promise<void> {
-    let scale = parseInt(Scale as string, null);
+
+    let scale = parseFloat(Scale as string);
     if (isNaN(scale)) {
       this.zoom = Scale as InputZoomTypeFormat;
       // tslint:disable-next-line: deprecation
       const inPresentationMode = document.fullscreen;
 
-      const currentPage = this.docSrv.PresentDocument.Get(env.CurrentIndex);
+      const currentPage = this.docSrv.PresentDocument.Pages.Get(env.CurrentIndex);
 
       const container = document.getElementById('viewerContainer');
 

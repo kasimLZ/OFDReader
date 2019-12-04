@@ -2,7 +2,7 @@
 <div id="outerContainer" class="{{toolBarSrv.SideBarSrv.isSideBarOpen ? 'sidebarOpen' : ''}}">
     <app-sidebar></app-sidebar>
     <div id="mainContainer">
-        <app-toolbar></app-toolbar>
+        <app-toolbar *ngIf="ShowToolBar"></app-toolbar>
         <app-viewer-container [(Pages)]="Pages"></app-viewer-container>
     </div>
     <app-info-modal></app-info-modal>

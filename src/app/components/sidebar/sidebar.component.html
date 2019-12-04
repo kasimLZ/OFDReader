@@ -12,7 +12,7 @@
     <div id="sidebarContent">
         <div id="thumbnailView">
             <a *ngFor="let pic of toolbarSrv.SideBarSrv.SideBarThumbnail; let i = index;" title="页码 {{i + 1}}" (click)="toolbarSrv.ScrollTo(i)">
-                <div id="thumbnailContainer{{i + 1}}" class="thumbnail {{ toolbarSrv.currentIndex == i ? 'selected' : '' }}" data-loaded="true">
+                <div id="thumbnailContainer{{i + 1}}" class="thumbnail {{ toolbarSrv.CurrentIndex == i ? 'selected' : '' }}" data-loaded="true">
                     <div class="thumbnailSelectionRing" [ngStyle]="{ 'width': '100px', 'height': 100 / pic.scale + 'px'}">
                         <img class="thumbnailImage" style="width: 100%; height: 100%;" [src]="pic.base64">
                     </div>

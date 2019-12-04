@@ -1,5 +1,5 @@
-import { LazyCollection, Lazy } from 'type/memory';
-import PageItemBase from './Infrastructure/PageItem.base';
+import { LazyCollection } from 'type/memory';
+import { PageItemBase } from './Infrastructure/PageItem.base';
 
 import { DocShare } from './Infrastructure/DocShare';
 import { Layer } from './Layer';
@@ -14,7 +14,11 @@ export class Page extends IdentityElement {
 
     public status = false;
 
-    public constructor(DocID: number, private PageElement: Element, private docShare: DocShare) {
+    public constructor(
+        DocID: number,
+        private PageElement: Element,
+        docShare: DocShare,
+    ) {
         super(PageElement);
         this.BaseLoc = this.PageElement.getAttribute('BaseLoc');
 
@@ -35,7 +39,7 @@ export class Page extends IdentityElement {
 
             // tslint:disable-next-line: prefer-for-of
             for (let i = 0; i < layers.length; i++) {
-                const layer = new Layer(layers[i]);
+                const layer = new Layer(layers[i], docShare);
                 this.Layers.push(layer);
                 this.length += layer.length;
             }

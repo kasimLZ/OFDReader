@@ -11,7 +11,7 @@ import { ToolBarService } from 'src/app/services/modules';
   `
 })
 export class HandToolComponent {
-  constructor(private toobarSrv: ToolBarService) {}
+  constructor(public toobarSrv: ToolBarService) {}
 
   @HostListener('click')
   _click() {

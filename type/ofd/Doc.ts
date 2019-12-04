@@ -1,10 +1,12 @@
-import { Pencil } from './Pencil';
-import { Resource } from './Resource';
 import { PageCollection } from './Page';
 import { Lazy } from 'type/memory';
 import { Info } from './Info';
 import { DocShare } from './Infrastructure/DocShare';
 import { PhysicalBox } from './Infrastructure/PhysicalBox';
+import { DocumentRes } from './Resource/DocumentRes';
+import { PublicRes } from './Resource/PublicRes';
+import { TextObject } from './PageItem/TextObject';
+import { PathObject } from './PageItem/PathObject';
 
 export class Doc {
     private static readonly Reg = /Doc_(\d+)\/Document\.xml/;
@@ -27,6 +29,7 @@ export class Doc {
 
         const PhysicalBoxElement = XmlContext.querySelector('PhysicalBox');
         if (PhysicalBoxElement) { this.docShare.PhysicalBox = new PhysicalBox(PhysicalBoxElement); }
+
     }
 
     public readonly Index: number = 0;
@@ -38,9 +41,12 @@ export class Doc {
     /** Document Information Access Interface */
     public get Info(): Info { return this.info.Value; }
 
-
     private pages: PageCollection;
     public get Pages(): PageCollection { return this.pages; }
+
+    public get DocRes(): DocumentRes { return this.docShare.DocumentRes; }
+
+    public get PubRes(): PublicRes { return this.docShare.PublicRes; }
 
     public static async Parse(RootElement: Element, RootPrefix: string): Promise<Doc> {
         const DocRoot = RootElement.tryGetElementTextByTagName(`${RootPrefix}:DocRoot`);
@@ -51,8 +57,15 @@ export class Doc {
 
         const XmlContext = (await File.async('text')).ParseXmlDocument();
 
+        const doc = new Doc(DocRoot, RootElement, RootPrefix, XmlContext);
 
-        return new Doc(DocRoot, RootElement, RootPrefix, XmlContext);
+        const PublicResElement = XmlContext.querySelector('PublicRes');
+        if (PublicResElement) { doc.docShare.PublicRes = await PublicRes.Parse(doc.Index, PublicResElement); }
+
+        const DocumentResElement = XmlContext.querySelector('DocumentRes');
+        if (DocumentResElement) { doc.docShare.DocumentRes = await DocumentRes.Parse(DocumentResElement); }
+
+        return doc;
     }
 
 }

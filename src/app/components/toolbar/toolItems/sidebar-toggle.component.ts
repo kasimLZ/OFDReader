@@ -21,6 +21,5 @@ export class SidebarToggleComponent {
   @HostListener('click')
   _click() {
     this.SideBarSrv.SideBarToggle();
-    console.log(this.SideBarSrv.SideBarThumbnail);
   }
 }

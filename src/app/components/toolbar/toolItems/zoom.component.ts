@@ -1,4 +1,4 @@
-import { Component, HostListener, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ToolBarService, InputZoomTypeFormat } from 'src/app/services/modules';
 
 @Component({
