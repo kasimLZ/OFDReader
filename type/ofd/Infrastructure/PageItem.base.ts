@@ -14,4 +14,9 @@ export abstract class PageItemBase {
 
     public abstract Draw(canvas: CanvasRenderingContext2D, Zoom?: number): void;
 
+    protected ZoomPos(coordinate: number, zoom?: number): number {
+        if (!zoom) { zoom = 1; }
+        return coordinate * DocShare.DEFAULT_ZOOM * zoom;
+    }
+
 }

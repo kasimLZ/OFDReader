@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DocumentService, ToolBarService } from './services/modules';
 import { Page, Doc } from 'type/ofd';
@@ -8,6 +8,7 @@ import { Page, Doc } from 'type/ofd';
   templateUrl: './app.component.html',
 })
 export class AppComponent {
+
   title = 'OFDReader';
 
   public Pages: Page[] = [];
@@ -17,13 +18,30 @@ export class AppComponent {
     public docSrv: DocumentService,
     public toolBarSrv: ToolBarService
   ) {
+    this.http.get(document.querySelector('html').getAttribute('config')).subscribe(
+      (a: OfdConfig) => { window.initReaderConfig(a); this.LoadFile(); },
+      () => { this.LoadFile(); } );
+  }
+
+
+
+  public get ShowToolBar(): boolean {
+    let status = false;
+    for (const key of Object.keys(window.ofd.Feature)) {
+      status = status || window.ofd.Feature[key];
+      if (status) { return status; }
+    }
+    return status;
+  }
+
+  private LoadFile() {
     let FilePath = window.location.Filter('_');
 
     if (FilePath == null) { return; }
     FilePath = decodeURIComponent(FilePath);
 
-    if (!FilePath.startsWith('http://')) {
-      FilePath = window.ofd.BaseUrl + FilePath;
+    if (!FilePath.startsWith('http://') && !FilePath.startsWith('https://')) {
+      FilePath = (window.ofd.BaseUrl ? window.ofd.BaseUrl : '') + FilePath;
     }
 
     this.http.post(FilePath, {}, { responseType: 'blob', observe: 'response' })
@@ -39,15 +57,6 @@ export class AppComponent {
       }, (error: any) => {
         console.error(error);
       });
-  }
-
-  public get ShowToolBar(): boolean {
-    let status = false;
-    for (const key of Object.keys(window.ofd.Feature)) {
-      status = status || window.ofd.Feature[key];
-      if (status) { return status; }
-    }
-    return status;
   }
 
   private GetFileName(filePath: string, header: HttpHeaders): string {

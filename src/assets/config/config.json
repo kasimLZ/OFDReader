@@ -1,5 +1,5 @@
-window.ofd = {
-    "BaseUrl": "http://localhost:2327/Home/File/",
+{
+    "BaseUrl": "http://localhost:2327/File/",
     "DefaultZoom": 3,
     "Feature": {
         "DownLoad": true,
@@ -13,7 +13,7 @@ window.ofd = {
         "SideBar": true,
         "ToFirst": true,
         "ToLast": true,
-        "Zoomable": true,
+        "Zoomable": true
     },
-    "FileHeader": "file-name",
-};
+    "FileHeader": "file-name"
+}

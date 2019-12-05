@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { ToolBarService, InputZoomTypeFormat } from 'src/app/services/modules';
+import { ZoomService, InputZoomTypeFormat } from 'src/app/services/modules';
 
 @Component({
     selector: 'app-zoom',
     template: `
 <div class="splitToolbarButton">
-    <button id="zoomOut" class="toolbarButton zoomOut" title="缩小" tabindex="21" data-l10n-id="zoom_out" (click)="ZoomTo()">
+    <button id="zoomOut" class="toolbarButton zoomOut" title="缩小" tabindex="21" data-l10n-id="zoom_out" (click)="zoomSrv.ToPrev()">
         <span data-l10n-id="zoom_out_label">缩小</span>
     </button>
     <div class="splitToolbarButtonSeparator"></div>
-    <button id="zoomIn" class="toolbarButton zoomIn" title="放大" tabindex="22" data-l10n-id="zoom_in" (click)="ZoomTo()">
+    <button id="zoomIn" class="toolbarButton zoomIn" title="放大" tabindex="22" data-l10n-id="zoom_in" (click)="zoomSrv.ToNext()">
         <span data-l10n-id="zoom_in_label">放大</span>
     </button>
 </div>
@@ -21,14 +21,10 @@ import { ToolBarService, InputZoomTypeFormat } from 'src/app/services/modules';
   `
 })
 export class ZoomComponent {
-    constructor(public toobarSrv: ToolBarService) { }
+    constructor(public zoomSrv: ZoomService) { }
 
-    public get Options(): any[] { return this.toobarSrv.ZoomSrv.Options; }
+    public get Options(): any[] { return this.zoomSrv.Options; }
 
-    private type: InputZoomTypeFormat = 'auto';
-    public get ZoomType(): InputZoomTypeFormat { return this.type; }
-    public set ZoomType(type: InputZoomTypeFormat) { this.type = type; this.toobarSrv.ZoomSrv.Change(type); }
-
-    public ZoomTo() {
-    }
+    public get ZoomType(): InputZoomTypeFormat { return this.zoomSrv.Zoom; }
+    public set ZoomType(type: InputZoomTypeFormat) { this.zoomSrv.Change(type); }
 }

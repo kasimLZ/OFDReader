@@ -29,7 +29,7 @@ export class FontCollection extends CollectionElement<Font> {
         super(PencilsElement, 'Font', index => new Font(this.PencilsElement.children[index]), PencilsElement.children.length);
     }
 }
-
+// Default
 FontFamilyMap.Add('黑体', 'SimHei');
 FontFamilyMap.Add('微软雅黑', 'Microsoft YaHei');
 FontFamilyMap.Add('微软正黑体', 'Microsoft JhengHei');

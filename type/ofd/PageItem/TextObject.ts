@@ -95,9 +95,9 @@ export class TextObject extends PageItemBase {
     public Draw(canvas: CanvasRenderingContext2D, Zoom?: number): void {
         if (!Zoom) { Zoom = 1; }
         canvas.fillStyle = this.Color;
-        canvas.font = `${Math.ceil(this.Size * DocShare.DEFAULT_ZOOM * Zoom)}px ${this.Font.FamilyName}`;
+        canvas.font = `${Math.ceil(this.ZoomPos(this.Size, Zoom))}px ${this.Font.FamilyName}`;
         for (const cset of this.CharSet) {
-            canvas.fillText(cset.chr, cset.x * DocShare.DEFAULT_ZOOM * Zoom, cset.y * DocShare.DEFAULT_ZOOM * Zoom);
+            canvas.fillText(cset.chr, this.ZoomPos(cset.x, Zoom), this.ZoomPos(cset.y, Zoom));
         }
     }
 }

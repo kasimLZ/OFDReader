@@ -1,6 +1,10 @@
 interface Window {
+
     /** OFD Reader Configuration Node */
     ofd: OfdConfig;
+
+    /** */
+    initReaderConfig(config?: OfdConfig): void;
 }
 
 interface OfdConfig {
@@ -31,3 +35,7 @@ interface OfdFeature {
     ToLast: boolean;
     Zoomable: boolean;
 }
+
+Window.prototype.initReaderConfig = function(config?: OfdConfig) {
+    this.ofd = config ? config : { Feature: {} };
+};

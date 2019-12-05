@@ -4,7 +4,7 @@ import { DocumentService } from './document.service';
 
 interface ZoomOption {
   sort: number;
-  value: string;
+  value: string | number;
   i10n: string;
   text: string;
 }
@@ -15,12 +15,12 @@ class ZoomOptions {
   public 'actual': ZoomOption = { sort: 2, value: 'actual', i10n: 'page_scale_actual', text: '实际大小' };
   public 'fit': ZoomOption = { sort: 3, value: 'fit', i10n: 'page_scale_fit', text: '适合页面' };
   public 'width': ZoomOption = { sort: 4, value: 'width', i10n: 'page_scale_width', text: '适合页宽' };
-  public '0.5': ZoomOption = { sort: 5, value: '0.5', i10n: 'page_scale_percent', text: '50%' };
-  public '0.75': ZoomOption = { sort: 6, value: '0.75', i10n: 'page_scale_percent', text: '75%' };
-  public '1': ZoomOption = { sort: 7, value: '1', i10n: 'page_scale_percent', text: '100%' };
-  public '2': ZoomOption = { sort: 8, value: '2', i10n: 'page_scale_percent', text: '200%' };
-  public '3': ZoomOption = { sort: 9, value: '3', i10n: 'page_scale_percent', text: '300%' };
-  public '4': ZoomOption = { sort: 10, value: '4', i10n: 'page_scale_percent', text: '400%' };
+  public '0.5': ZoomOption = { sort: 5, value: 0.5, i10n: 'page_scale_percent', text: '50%' };
+  public '0.75': ZoomOption = { sort: 6, value: 0.75, i10n: 'page_scale_percent', text: '75%' };
+  public '1': ZoomOption = { sort: 7, value: 1, i10n: 'page_scale_percent', text: '100%' };
+  public '2': ZoomOption = { sort: 8, value: 2, i10n: 'page_scale_percent', text: '200%' };
+  public '3': ZoomOption = { sort: 9, value: 3, i10n: 'page_scale_percent', text: '300%' };
+  public '4': ZoomOption = { sort: 10, value: 4, i10n: 'page_scale_percent', text: '400%' };
   // public 'custom': ZoomOption = { sort: 11, value: 'custom', i10n: 'page_scale_custom', text: '自定义' };
 }
 
@@ -33,20 +33,13 @@ export class ZoomService {
 
   constructor(private docSrv: DocumentService) {}
 
-  private options: ZoomOptions = new ZoomOptions();
-
   private scale: number;
   public get Scale(): number { return this.scale; }
 
   private zoom: InputZoomTypeFormat = 'auto';
   public get Zoom(): InputZoomTypeFormat { return this.zoom; }
 
-
-
-  public get Options(): any {
-    return Object.values(new ZoomOptions())
-      .sort((a: ZoomOption, b: ZoomOption) => a.sort - b.sort);
-  }
+  public readonly Options: ZoomOption[] =  Object.values(new ZoomOptions()).sort((a: ZoomOption, b: ZoomOption) => a.sort - b.sort);
 
   public ReRender() {
     for (const page of this.docSrv.PresentDocument.Pages) {
@@ -55,7 +48,6 @@ export class ZoomService {
       }
     }
   }
-
 
   public Change(Scale: InputZoomTypeFormat|number): Promise<void> {
 
@@ -89,6 +81,37 @@ export class ZoomService {
       }
     }
     this.scale = scale;
+    this.ReRender();
+  }
+
+  public ToNext(): void {
+    let present = new ZoomOptions()[this.Zoom].value;
+    if (typeof present === 'string') { present = this.scale; }
+    for (const opt of this.Options) {
+      if (typeof opt.value === 'string') { continue; }
+      if (opt.value > present) {
+        this.zoom = opt.value.toString() as InputZoomTypeFormat;
+        this.scale = opt.value;
+        break;
+      }
+    }
+    this.ReRender();
+  }
+
+  public ToPrev(): void {
+    let present = new ZoomOptions()[this.Zoom].value;
+    if (typeof present === 'string') { present = this.scale; }
+
+    let last: ZoomOption = null;
+    for (const opt of this.Options) {
+      if (typeof opt.value === 'string') { continue; }
+      if (opt.value >= present) { break; }
+      last = opt;
+    }
+    if (last != null) {
+      this.zoom = last.value.toString() as InputZoomTypeFormat;
+      this.scale = last.value as number;
+    }
     this.ReRender();
   }
 }

@@ -4,6 +4,8 @@ interface String {
      * @param content xml string
      */
     ParseXmlDocument(): Document;
+
+    IsNullOrEmpty(): boolean;
 }
 
 
@@ -17,3 +19,7 @@ String.prototype.ParseXmlDocument = function(): Document {
         return xmlDoc;
     }
 };
+
+String.prototype.IsNullOrEmpty = function(): boolean {
+    return this == null || this.trim().length === 0;
+}
