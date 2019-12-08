@@ -47,8 +47,4 @@ export class DocumentService {
   }
   public get PresentDocument(): Doc { return this.ofdDocuments[Env.CurrentDocIndex]; }
 
-  public GetDocAllPages(DocIndex: number): PageCollection {
-    Env.CurrentDocIndex = DocIndex;
-    return this.ofdDocuments[DocIndex].Pages;
-  }
 }
