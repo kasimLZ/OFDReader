@@ -11,6 +11,8 @@ export class AppComponent {
 
   title = 'OFDReader';
 
+  public DocContext: Doc; 
+
   public Pages: Page[] = [];
 
   constructor(
@@ -49,11 +51,11 @@ export class AppComponent {
         const FileName: string = this.GetFileName(FilePath, response.headers);
 
         await this.docSrv.InitDocumentContextAsync(FileName, new Blob([response.body], { type: 'application/zip' }));
-        const collection = this.docSrv.GetDocAllPages(0);
-        for (const page of collection) {
+        this.DocContext = this.docSrv.PresentDocument;
+        for (const page of this.DocContext.Pages) {
           this.Pages.push(page);
         }
-        this.toolBarSrv.MaxPage = this.Pages.length;
+        this.toolBarSrv.MaxPage = this.DocContext.Pages.Length;
       }, (error: any) => {
         console.error(error);
       });

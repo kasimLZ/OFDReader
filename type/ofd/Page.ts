@@ -45,7 +45,13 @@ export class Page extends IdentityElement {
             }
             this.status = true;
         });
+
+        setTimeout(() => {
+            this.bbb = '65656565';
+        }, 5000);
     }
+
+    public bbb: string = '23232';
 
     public readonly Index: string = null;
 
