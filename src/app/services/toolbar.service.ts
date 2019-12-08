@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ZoomService } from './zoom.service';
 import { SideBarService } from './sidebar.service';
 import env from './environment.variable';
+import { SearchService } from './search.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class ToolBarService {
 
   constructor(
     public readonly ZoomSrv: ZoomService,
-    public readonly SideBarSrv: SideBarService
+    public readonly SideBarSrv: SideBarService,
+    public readonly SearchSrv: SearchService
     ) { }
 
   /** 手型工具开关 */

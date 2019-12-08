@@ -8,6 +8,7 @@ import { DownloadComponent } from './toolItems/download.component';
 import { FullScreenComponent } from './toolItems/fullscreen.component';
 import { PrintComponent } from './toolItems/print.component';
 import { ZoomComponent } from './toolItems/zoom.component';
+import { SearchComponent } from './toolItems/search.component';
 
 const MainToolBarItems = [
     PageSelecterComponent,
@@ -15,7 +16,8 @@ const MainToolBarItems = [
     DownloadComponent,
     FullScreenComponent,
     PrintComponent,
-    ZoomComponent
+    ZoomComponent,
+    SearchComponent
 ];
 
 import { FirstPageComponent } from './toolItems/first-page.component';
@@ -34,6 +36,8 @@ const SecondToolBarItems = [
     InfoComponent,
 ];
 
+import { SearchBarComponent } from './toolItems/searchBar.component';
+
 @NgModule({
     imports: [
         FormsModule,
@@ -41,11 +45,13 @@ const SecondToolBarItems = [
     ],
     declarations: [
         ...MainToolBarItems,
-        ...SecondToolBarItems
+        ...SecondToolBarItems,
+        SearchBarComponent
     ],
     exports: [
         ...MainToolBarItems,
-        ...SecondToolBarItems
+        ...SecondToolBarItems,
+        SearchBarComponent
     ]
   })
 export class ToolBarModule {}

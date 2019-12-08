@@ -1,16 +1,24 @@
 import { Injectable } from '@angular/core';
+import { DocumentService } from './document.service';
+import { Info } from 'type/ofd';
+import { Lazy } from 'type/memory';
 
 @Injectable({
     providedIn: 'root'
   })
   export class InfoModalService {
-    private info: { [key: string]: string }[];
 
-    public get Info(): { [key: string]: string }[] { return this.info; }
+    public constructor(private DocSrv: DocumentService) {}
 
-    public get IsHide(): boolean { return this.info == null; }
+    private visible = false;
 
-    public ShowInfo(info: { [key: string]: string }[]) { this.info = info; }
+    private info = new Lazy<Info>( () =>  this.DocSrv.PresentDocument.Info);
 
-    public Close() { this.info = null; }
+    public get Info(): Info { return this.info.Value; }
+
+    public get Visible(): boolean { return this.visible; }
+
+    public ShowInfo() { this.visible = true; }
+
+    public Close() { this.visible = false; }
   }

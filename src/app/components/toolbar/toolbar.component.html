@@ -9,6 +9,7 @@
                     <!-- 空格占位符 -->
                     <div class="toolbarButtonSpacer"></div>
                     <!-- 查找 暂时禁用 -->
+                    <app-search></app-search>
                     <!-- 页面选择器 -->
                     <app-page-selecter></app-page-selecter>
                 </ng-container>
@@ -45,7 +46,7 @@
         </div>
     </div>
 </div>
-
+<app-search-bar></app-search-bar>
 <div id="secondaryToolbar" [ngClass]="{ 'secondaryToolbar': true, 'doorHangerRight': true, 'hidden': !toobarSrv.SecondToolBarSwitch  }" (mouseleave)="CloseSecondToolBar()">
     <div id="secondaryToolbarButtonContainer" style="max-height: 827px;">
         <!-- 首页 -->

@@ -15,6 +15,6 @@ export class InfoComponent {
 
   @HostListener('click')
   _click() {
-    this.infoSrv.ShowInfo([{a: 'sss', b: 'fff'}, {c: 'wwww', d: 'cccc'}]);
+    this.infoSrv.ShowInfo();
   }
 }
