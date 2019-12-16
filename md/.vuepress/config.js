@@ -1,6 +1,6 @@
 module.exports = config => ({
     title: "OFD阅读器",
-    base: "/",
+    base: "/OFDReader/",
     dest: "../docs",
     locales: {
         "/": { lang: "zh-CN" },
