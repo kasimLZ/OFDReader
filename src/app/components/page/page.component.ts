@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ToolBarService } from 'src/app/services/modules';
+import { ToolBarService, RenderService } from 'src/app/services/modules';
 import { Page } from 'type/ofd';
-import { DomSanitizer } from '@angular/platform-browser';
+import { RenderedPage } from 'src/app/models/modules';
 
 @Component({
   selector: 'app-page',
@@ -14,14 +14,15 @@ export class PageComponent implements OnInit {
   private pageData: Page;
   private Canvas: HTMLCanvasElement;
   private Context: CanvasRenderingContext2D;
-  private IsRendered = false;
-
-
+  private Rendered: RenderedPage;
+  private MaxZoom: number;
 
   constructor(
       public toobarSrv: ToolBarService,
-      private sanitizer: DomSanitizer
-    ) {}
+      private renderSrv: RenderService
+    ) {
+      this.MaxZoom = this.toobarSrv.ZoomSrv.MaxZoom.value as number;
+    }
 
   public get PageWidth(): number { return this.pageData.Width * this.toobarSrv.ZoomSrv.Scale; }
   public get PageHeight(): number { return this.pageData.Height * this.toobarSrv.ZoomSrv.Scale; }
@@ -37,30 +38,30 @@ export class PageComponent implements OnInit {
   pageDataChange: EventEmitter<any> = new EventEmitter();
 
   ngOnInit() {
-    this.ElementId = `pageContainer${this.pageData.Index}`;
+    this.ElementId = `pageContainer_Doc${this.pageData.DocID}_Page${this.pageData.Index}`;
     this.pageData.Render = () => this.Render();
-  }
-
-  public Render(): void {
-    if (!this.IsRendered) {
-      this.Canvas = document.querySelector(`#${this.ElementId} canvas`);
-      this.Context = this.Canvas.getContext('2d');
-    }
 
     const WaitLoaded = setInterval(() => {
       if (this.pageData.status) {
-        this.DrawAllElement();
+
+        this.Rendered = this.renderSrv.TryGetImageOrRendering(this.pageData);
+
+        const scale = this.toobarSrv.ZoomSrv.Scale / this.MaxZoom;
+        this.Context.scale(scale, scale);
+        this.Context.drawImage(this.Rendered.Image, 0, 0);
+
+        this.toobarSrv.SideBarSrv.SetThumbnail(this.pageData.Index, this.PageData.Scale, this.Rendered.SafeUrl);
         clearInterval(WaitLoaded);
       }
     }, 100);
   }
 
-  private DrawAllElement(): void {
-    for (let index = 0; index < this.pageData.Length; index++) {
-      this.pageData.GetItemByIndex(index).Draw(this.Context, this.toobarSrv.ZoomSrv.Scale);
+  public Render(): void {
+    if (!this.Canvas || !this.Context) {
+      this.Canvas = document.querySelector(`#${this.ElementId} canvas`);
+      this.Context = this.Canvas.getContext('2d');
     }
-    const i = parseInt(this.pageData.Index.replace('_Page_', ''), null);
-    this.toobarSrv.SideBarSrv.SetThumbnail(i, this.PageData.Scale,
-      this.sanitizer.bypassSecurityTrustUrl(this.Canvas.toDataURL('image/png')));
+
+    
   }
 }

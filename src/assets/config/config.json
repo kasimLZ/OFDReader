@@ -1,5 +1,5 @@
 {
-    "BaseUrl": "http://localhost:2327/File/",
+    "BaseUrl": "http://192.168.1.108/File/",
     "DefaultZoom": 3,
     "Feature": {
         "DownLoad": true,

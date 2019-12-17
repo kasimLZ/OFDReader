@@ -41,6 +41,8 @@ export class ZoomService {
 
   public readonly Options: ZoomOption[] =  Object.values(new ZoomOptions()).sort((a: ZoomOption, b: ZoomOption) => a.sort - b.sort);
 
+  public get MaxZoom(): ZoomOption { return this.Options[this.Options.length - 1]; }
+
   public ReRender() {
     for (const page of this.docSrv.PresentDocument.Pages) {
       if (page.status) {

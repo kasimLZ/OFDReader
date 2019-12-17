@@ -11,7 +11,7 @@ export class AppComponent {
 
   title = 'OFDReader';
 
-  public DocContext: Doc; 
+  public DocContext: Doc;
 
   public Pages: Page[] = [];
 
@@ -37,11 +37,16 @@ export class AppComponent {
   }
 
   private LoadFile() {
-    let FilePath = window.location.Filter('_');
 
+    // 从url参数"_"获取文件路径
+    let FilePath = window.location.Filter('_');
     if (FilePath == null) { return; }
+
+    // 原则上比较特殊的路径许需要通过Urlencodeing进行编码，例如通过哈希码或Guid取值
     FilePath = decodeURIComponent(FilePath);
 
+    // 对于非http或https开头的路径会按照短路径处理
+    // 段路径会被拼接在基础路径之后
     if (!FilePath.startsWith('http://') && !FilePath.startsWith('https://')) {
       FilePath = (window.ofd.BaseUrl ? window.ofd.BaseUrl : '') + FilePath;
     }

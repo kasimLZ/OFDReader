@@ -37,7 +37,6 @@ export class ProgressService {
             if (approach) {
 
             } else {
-                
             }
         }, 10);
     }

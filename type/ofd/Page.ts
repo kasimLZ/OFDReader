@@ -7,7 +7,7 @@ import { IdentityElement } from './Infrastructure/IdentityElement';
 import { PhysicalBox } from './Infrastructure/PhysicalBox';
 
 export class Page extends IdentityElement {
-    private static reg: RegExp = /Pages\/(Page_\d+)\/Content.xml/;
+    private static reg: RegExp = /Pages\/Page_(\d+)\/Content.xml/;
     private Layers: Layer[] = [];
     private PageDocument: Element;
     private BaseLoc: string;
@@ -21,21 +21,21 @@ export class Page extends IdentityElement {
     ) {
         super(PageElement);
         this.BaseLoc = this.PageElement.getAttribute('BaseLoc');
-
+        this.DocID = DocID;
         const mths = this.BaseLoc.match(Page.reg);
-        this.Index = `_${mths[1]}`;
+        this.Index = parseInt(mths[1], null);
 
         DocShare.PRESENT_ARCHIVE.file(`Doc_${DocID}/${this.BaseLoc}`).async('text').then(ctx => {
             this.PageDocument = ctx.ParseXmlDocument().documentElement;
 
-            const PhysicalBoxs = this.PageDocument.getElementsByTagName('ofd:PhysicalBox');
+            const PhysicalBoxs = this.PageDocument.querySelectorAll('PhysicalBox');
             if (PhysicalBoxs.length < 1) {
                 this.pageBox = docShare.PhysicalBox;
             } else {
                 this.pageBox = new PhysicalBox(PhysicalBoxs[0]);
             }
 
-            const layers = this.PageDocument.getElementsByTagName('ofd:Layer');
+            const layers = this.PageDocument.querySelectorAll('Layer');
 
             // tslint:disable-next-line: prefer-for-of
             for (let i = 0; i < layers.length; i++) {
@@ -45,15 +45,11 @@ export class Page extends IdentityElement {
             }
             this.status = true;
         });
-
-        setTimeout(() => {
-            this.bbb = '65656565';
-        }, 5000);
     }
 
-    public bbb: string = '23232';
+    public readonly DocID: number = null;
 
-    public readonly Index: string = null;
+    public readonly Index: number = null;
 
     private pageBox: PhysicalBox;
     public get Width(): number { return this.status ? this.pageBox.Width : 0; }

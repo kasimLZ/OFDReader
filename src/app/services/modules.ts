@@ -4,6 +4,7 @@ import { InfoModalService } from './info.modal.service';
 import { ZoomService, InputZoomTypeFormat } from './zoom.service';
 import { SideBarService } from './sidebar.service';
 import { SearchService } from './search.service';
+import { RenderService } from './render.service';
 
 export {
     DocumentService,
@@ -12,5 +13,6 @@ export {
     ZoomService,
     InputZoomTypeFormat,
     SideBarService,
-    SearchService
+    SearchService,
+    RenderService
 };
