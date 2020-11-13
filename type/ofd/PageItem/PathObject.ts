@@ -3,14 +3,19 @@ import { DocShare } from '../Infrastructure/DocShare';
 import { Area } from '../Infrastructure/Area';
 import { timingSafeEqual } from 'crypto';
 
+/** Line drawing instructions */
 type actionType = 'S' | 'M' | 'L' | 'Q' | 'B' | 'C';
 
-/** 暂时不支持A命令 */
+/** Single-step operation instruction, including instruction type and required coordinates */
 interface Operation {
+    /** `A` instruction is not currently supported */
     action: actionType;
+
+    /** Coordinate points required to execute the instruction */
     points: Point[];
 }
 
+/** Coordinate structure */
 class Point {
     public readonly x: number;
     public readonly y: number;
@@ -21,10 +26,9 @@ class Point {
     }
 }
 
-
+/** Path node object, responsible for parsing and receipt of path type nodes */
 export class PathObject extends PageItemBase {
     public static readonly TagName = 'PathObject';
-
 
     public constructor(node: Element, docShare: DocShare) {
         super(node, docShare);
@@ -44,7 +48,6 @@ export class PathObject extends PageItemBase {
     public get Color(): string { return this.color; }
 
     private Operations: Operation[] = [];
-
 
     private AbbreviatedDataSet(AbbreviatedData: Element): void {
         const opera = AbbreviatedData.innerHTML.trim().split(' ');

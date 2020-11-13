@@ -59,8 +59,6 @@ export class Page extends IdentityElement {
     private length = 0;
     public get Length(): number { return this.length; }
 
-    public Render: () => void;
-
     public GetItemByIndex(index: number): PageItemBase {
         if (index >= 0 && index < this.Length) {
             for (const layer of this.Layers) {

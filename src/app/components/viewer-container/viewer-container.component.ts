@@ -14,16 +14,11 @@ export class ViewerContainerComponent implements OnInit {
   @Input()
   get Pages() { return this.pages; }
 
-  set Pages(value) {
-      this.pages = value;
-      this.pagesChange.emit(value);
-  }
+  set Pages(value) { this.pages = value; }
 
   public pages: Page[] = [];
 
   public lastScroll = 0;
-  @Output()
-  pagesChange: EventEmitter<any> = new EventEmitter();
 
   private startDrag = false;
 

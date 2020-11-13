@@ -51,7 +51,7 @@ export class AppComponent {
       FilePath = (window.ofd.BaseUrl ? window.ofd.BaseUrl : '') + FilePath;
     }
 
-    this.http.post(FilePath, {}, { responseType: 'blob', observe: 'response' })
+    this.http.get(FilePath, { responseType: 'blob', observe: 'response' })
       .subscribe(async response => {
         const FileName: string = this.GetFileName(FilePath, response.headers);
 

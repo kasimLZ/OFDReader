@@ -102,7 +102,7 @@ export class TextObject extends PageItemBase {
     }
 }
 
-interface CharPosition {
+export interface CharPosition {
     chr: string;
     x: number;
     y: number;

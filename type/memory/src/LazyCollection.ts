@@ -39,4 +39,3 @@ export class LazyCollection<T> implements Iterable<T> {
         };
     }
 }
-

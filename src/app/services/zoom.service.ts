@@ -43,14 +43,6 @@ export class ZoomService {
 
   public get MaxZoom(): ZoomOption { return this.Options[this.Options.length - 1]; }
 
-  public ReRender() {
-    for (const page of this.docSrv.PresentDocument.Pages) {
-      if (page.status) {
-        page.Render();
-      }
-    }
-  }
-
   public Change(Scale: InputZoomTypeFormat|number): Promise<void> {
 
     let scale = parseFloat(Scale as string);
@@ -83,7 +75,6 @@ export class ZoomService {
       }
     }
     this.scale = scale;
-    this.ReRender();
   }
 
   public ToNext(): void {
@@ -97,7 +88,6 @@ export class ZoomService {
         break;
       }
     }
-    this.ReRender();
   }
 
   public ToPrev(): void {
@@ -114,7 +104,6 @@ export class ZoomService {
       this.zoom = last.value.toString() as InputZoomTypeFormat;
       this.scale = last.value as number;
     }
-    this.ReRender();
   }
 }
 

@@ -12,3 +12,12 @@ export {
     PageCollection,
     DocShare
 };
+
+import { CharPosition, TextObject } from './PageItem/TextObject';
+import { PathObject } from './PageItem/PathObject';
+
+export {
+    CharPosition,
+    TextObject,
+    PathObject
+};
